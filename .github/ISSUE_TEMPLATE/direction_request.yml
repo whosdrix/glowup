@@ -1,0 +1,22 @@
+name: Art direction idea
+description: Suggest a new direction recipe
+labels: [direction]
+body:
+  - type: input
+    id: name
+    attributes:
+      label: Name
+      placeholder: brutalist, swiss, retro print, ...
+    validations:
+      required: true
+  - type: textarea
+    id: fits
+    attributes:
+      label: Which businesses would it suit?
+    validations:
+      required: true
+  - type: textarea
+    id: refs
+    attributes:
+      label: Reference sites
+      description: Links to real sites that show the look.

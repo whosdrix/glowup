@@ -1,0 +1,26 @@
+name: Bug report
+description: A script fails or measures something wrong
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: The command you ran, the URL if it is public, and what you expected instead.
+    validations:
+      required: true
+  - type: input
+    id: agent
+    attributes:
+      label: Agent
+      placeholder: Claude Code 2.x, Codex, ...
+  - type: textarea
+    id: doctor
+    attributes:
+      label: Output of `node skills/glowup/dist/glowup.mjs doctor`
+      render: text
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error output
+      render: text

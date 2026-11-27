@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - name: Bundled CLI is up to date
+        run: |
+          npm run build
+          git diff --exit-code -- skills/glowup/dist || (echo "Run npm run build and commit skills/glowup/dist" && exit 1)
+      - run: npx playwright-core install --with-deps --only-shell chromium
+      - run: npm test
+
+  template:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+      - name: Astro template builds
+        working-directory: skills/glowup/templates/astro-base
+        run: |
+          npm install --no-audit --no-fund
+          npm run build
