@@ -17,12 +17,16 @@ export interface RawImage {
   alt: string | null
   width: number
   height: number
+  naturalWidth?: number
+  naturalHeight?: number
+  original?: string
   role: 'logo' | 'content' | 'background'
 }
 
 export interface RawPage {
   url: string
   title: string
+  siteName: string | null
   description: string
   lang: string
   ogImage: string | null
@@ -38,7 +42,7 @@ export interface RawPage {
   lines: string[]
   address: string | null
   jsonld: unknown[]
-  colorSamples: { color: string; weight: number; kind: 'bg' | 'text' }[]
+  colorSamples: { color: string; weight: number; kind: 'bg' | 'text' | 'page' }[]
   fontSamples: { stack: string; chars: number; heading: boolean }[]
   forms: { action: string; fields: string[] }[]
 }
@@ -89,6 +93,13 @@ export function extractPage(): RawPage {
     }
   }
   const clean = (s: string | null | undefined) => (s ?? '').replace(/\s+/g, ' ').trim()
+  // innerText applies text-transform, which would record "READ MORE" instead of the source text.
+  const textOf = (el: Element) =>
+    clean(
+      getComputedStyle(el).textTransform === 'none'
+        ? (el as HTMLElement).innerText
+        : el.textContent,
+    )
   const visible = (el: Element) => {
     const style = getComputedStyle(el)
     if (style.display === 'none' || style.visibility === 'hidden' || Number(style.opacity) === 0)
@@ -132,6 +143,9 @@ export function extractPage(): RawPage {
       alt: img.getAttribute('alt'),
       width: Math.round(r.width),
       height: Math.round(r.height),
+      naturalWidth: img.naturalWidth,
+      naturalHeight: img.naturalHeight,
+      original: src.split('/').pop()?.split('?')[0],
       role: isLogoish(img) || (logo && logo.src === src) ? 'logo' : 'content',
     })
     blocks.push({ kind: 'image', src, alt: img.getAttribute('alt') })
@@ -191,7 +205,7 @@ export function extractPage(): RawPage {
     }
     const tag = el.tagName
     if (/^H[1-6]$/.test(tag)) {
-      const text = clean((el as HTMLElement).innerText)
+      const text = textOf(el)
       if (text) blocks.push({ kind: 'heading', level: Number(tag[1]), text })
       return
     }
@@ -342,7 +356,14 @@ export function extractPage(): RawPage {
       s.backgroundColor !== 'transparent'
     ) {
       const area = Math.min(r.width, vw) * Math.min(r.height, 2000)
-      colorSamples.push({ color: s.backgroundColor, weight: area / 1000, kind: 'bg' })
+      const pageSized =
+        el === document.body ||
+        (r.width >= vw * 0.9 && r.height >= Math.max(1200, document.body.scrollHeight * 0.6))
+      colorSamples.push({
+        color: s.backgroundColor,
+        weight: area / 1000,
+        kind: pageSized ? 'page' : 'bg',
+      })
     }
     let direct = 0
     for (const node of Array.from(el.childNodes)) {
@@ -357,7 +378,7 @@ export function extractPage(): RawPage {
   const htmlBg = getComputedStyle(document.documentElement).backgroundColor
   const bodyBg = getComputedStyle(document.body).backgroundColor
   if (bodyBg === 'rgba(0, 0, 0, 0)' && htmlBg === 'rgba(0, 0, 0, 0)') {
-    colorSamples.push({ color: 'rgb(255, 255, 255)', weight: (vw * 2000) / 1000, kind: 'bg' })
+    colorSamples.push({ color: 'rgb(255, 255, 255)', weight: (vw * 2000) / 1000, kind: 'page' })
   }
 
   const jsonld: unknown[] = []
@@ -395,6 +416,7 @@ export function extractPage(): RawPage {
   return {
     url: location.href,
     title: clean(document.title),
+    siteName: meta('meta[property="og:site_name"]'),
     description: meta('meta[name="description"]') ?? '',
     lang: document.documentElement.lang || '',
     ogImage: abs(meta('meta[property="og:image"]')) || null,
@@ -555,7 +577,9 @@ export function measurePage(): RawMeasure {
     smallTextShare: totalChars ? Math.round((smallChars / totalChars) * 1000) / 1000 : 0,
     lineLength: p90,
     smallTapTargets: targets,
-    horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 2,
+    horizontalOverflow: /width\s*=\s*device-width/.test(viewport)
+      ? Math.max(document.documentElement.scrollWidth, window.innerWidth) > screen.width + 2
+      : document.documentElement.scrollWidth > window.innerWidth + 2,
     viewportMeta: /width\s*=\s*device-width/.test(viewport),
     fontFamilies: families.size,
     textColors: colors.size,

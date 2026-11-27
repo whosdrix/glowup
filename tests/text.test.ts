@@ -135,3 +135,23 @@ describe('contentMarkdown', () => {
     expect(md.trim().endsWith('© Shop')).toBe(true)
   })
 })
+
+describe('address and hours without markup', () => {
+  it('finds UK and Czech addresses in footer lines', async () => {
+    const { findAddress } = await import('../src/lib/contact.js')
+    expect(findAddress(['Marlow Road Dental', '42 Marlow Road, Harrowmere HM4 7QT'])).toBe(
+      '42 Marlow Road, Harrowmere HM4 7QT',
+    )
+    expect(findAddress(['© 2009 Autoservis · Nádražní 118 · 539 01 Hlinsko · tel 123'])).toBe(
+      'Nádražní 118, 539 01 Hlinsko',
+    )
+    expect(findAddress(['Nádražní 118', '539 01 Hlinsko'])).toBe('Nádražní 118, 539 01 Hlinsko')
+    expect(findAddress(['Nothing here', 'Call 0800 123'])).toBeNull()
+  })
+
+  it('reads am/pm hours and closed days', () => {
+    expect(findHours(['Monday to Friday 8.30am - 5.30pm', 'Sunday closed', 'Ne: zavřeno'])).toEqual(
+      ['Monday to Friday 8.30am - 5.30pm', 'Sunday closed', 'Ne: zavřeno'],
+    )
+  })
+})

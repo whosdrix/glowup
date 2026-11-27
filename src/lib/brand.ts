@@ -49,19 +49,25 @@ export function findBusiness(pages: RawPage[]): Record<string, unknown> | null {
   return null
 }
 
+const GENERIC_TITLE =
+  /^(welcome|home|homepage|index|main page|úvod|domů|vítejte|úvodní stránka|startseite|accueil|inicio)\b/i
+
 export function guessName(home: RawPage, business: Record<string, unknown> | null): string {
   if (business && typeof business.name === 'string') return business.name
+  if (home.siteName) return home.siteName
   const parts = home.title
     .split(/\s[|\-–—:·]\s/)
     .map((s) => s.trim())
-    .filter(Boolean)
-  if (parts.length > 1) {
-    return [...parts].sort((a, b) => a.length - b.length)[0] ?? home.title
+    .filter((s) => s && !GENERIC_TITLE.test(s))
+  const copyright = home.lines.find((l) => /©|\(c\)|copyright/i.test(l)) ?? ''
+  const inCopyright = parts.find((p) => copyright.toLowerCase().includes(p.toLowerCase()))
+  if (inCopyright) return inCopyright
+  const logoAlt = home.logo?.alt?.replace(/\s*logo\s*/i, '').trim()
+  if (logoAlt && logoAlt.length < 60) {
+    const match = parts.find((p) => p.toLowerCase().includes(logoAlt.toLowerCase()))
+    return match ?? logoAlt
   }
-  if (home.logo?.alt && home.logo.alt.length < 60 && !/^logo$/i.test(home.logo.alt)) {
-    return home.logo.alt.replace(/\s*logo\s*/i, '').trim() || home.title
-  }
-  return parts[0] ?? new URL(home.url).hostname
+  return parts[0] ?? home.title ?? new URL(home.url).hostname
 }
 
 function ldAddress(business: Record<string, unknown> | null): string | null {
@@ -111,11 +117,17 @@ export function buildBrand(
 
   return {
     name: guessName(home, business),
-    accent: pickAccent(palette),
+    accent:
+      pickAccent(
+        buildPalette(
+          samples.filter((s) => s.kind !== 'page'),
+          { limit: 12 },
+        ),
+      ) ?? pickAccent(palette),
     themeColor: home.themeColor,
     palette,
     backgrounds: buildPalette(
-      samples.filter((s) => s.kind === 'bg'),
+      samples.filter((s) => s.kind !== 'text'),
       { limit: 6 },
     ),
     textColors: buildPalette(

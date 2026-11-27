@@ -112,12 +112,17 @@ export async function verify(opts: {
       await writeFile(join(ws.proof, 'delta.md'), deltaMarkdown(before, after))
 
       for (const row of deltaRows(before.totals, after.totals)) {
-        const mark = row.better ? '✓' : row.worse ? '✗' : ' '
+        const mark = row.better ? '✓' : row.worse ? (row.key === 'pageWeight' ? '!' : '✗') : ' '
         process.stderr.write(
           `  ${mark} ${row.label.padEnd(28)} ${row.before.padStart(8)} → ${row.after}\n`,
         )
       }
       process.stderr.write(`\n  Score ${before.score} → ${after.score}\n\n`)
+      if (deltaRows(before.totals, after.totals).some((r) => r.key === 'pageWeight' && r.worse)) {
+        log.warn(
+          'The new site is heavier than the original. Check image sizes; this does not fail verify.',
+        )
+      }
       if (failures.length) {
         log.fail(`${failures.length} problems to fix:`)
         for (const f of failures) process.stderr.write(`  - ${f}\n`)

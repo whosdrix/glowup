@@ -258,6 +258,9 @@ function extractPage() {
     }
   };
   const clean = (s) => (s ?? "").replace(/\s+/g, " ").trim();
+  const textOf = (el) => clean(
+    getComputedStyle(el).textTransform === "none" ? el.innerText : el.textContent
+  );
   const visible = (el) => {
     const style = getComputedStyle(el);
     if (style.display === "none" || style.visibility === "hidden" || Number(style.opacity) === 0)
@@ -295,6 +298,9 @@ function extractPage() {
       alt: img.getAttribute("alt"),
       width: Math.round(r.width),
       height: Math.round(r.height),
+      naturalWidth: img.naturalWidth,
+      naturalHeight: img.naturalHeight,
+      original: src.split("/").pop()?.split("?")[0],
       role: isLogoish(img) || logo && logo.src === src ? "logo" : "content"
     });
     blocks.push({ kind: "image", src, alt: img.getAttribute("alt") });
@@ -343,7 +349,7 @@ function extractPage() {
     }
     const tag = el.tagName;
     if (/^H[1-6]$/.test(tag)) {
-      const text2 = clean(el.innerText);
+      const text2 = textOf(el);
       if (text2) blocks.push({ kind: "heading", level: Number(tag[1]), text: text2 });
       return;
     }
@@ -461,7 +467,12 @@ function extractPage() {
     if (r.width < 1 || r.height < 1) continue;
     if (s.backgroundColor && s.backgroundColor !== "rgba(0, 0, 0, 0)" && s.backgroundColor !== "transparent") {
       const area = Math.min(r.width, vw) * Math.min(r.height, 2e3);
-      colorSamples.push({ color: s.backgroundColor, weight: area / 1e3, kind: "bg" });
+      const pageSized = el === document.body || r.width >= vw * 0.9 && r.height >= Math.max(1200, document.body.scrollHeight * 0.6);
+      colorSamples.push({
+        color: s.backgroundColor,
+        weight: area / 1e3,
+        kind: pageSized ? "page" : "bg"
+      });
     }
     let direct = 0;
     for (const node of Array.from(el.childNodes)) {
@@ -476,7 +487,7 @@ function extractPage() {
   const htmlBg = getComputedStyle(document.documentElement).backgroundColor;
   const bodyBg = getComputedStyle(document.body).backgroundColor;
   if (bodyBg === "rgba(0, 0, 0, 0)" && htmlBg === "rgba(0, 0, 0, 0)") {
-    colorSamples.push({ color: "rgb(255, 255, 255)", weight: vw * 2e3 / 1e3, kind: "bg" });
+    colorSamples.push({ color: "rgb(255, 255, 255)", weight: vw * 2e3 / 1e3, kind: "page" });
   }
   const jsonld = [];
   for (const s of Array.from(document.querySelectorAll('script[type="application/ld+json"]'))) {
@@ -501,6 +512,7 @@ function extractPage() {
   return {
     url: location.href,
     title: clean(document.title),
+    siteName: meta('meta[property="og:site_name"]'),
     description: meta('meta[name="description"]') ?? "",
     lang: document.documentElement.lang || "",
     ogImage: abs(meta('meta[property="og:image"]')) || null,
@@ -624,7 +636,7 @@ function measurePage() {
     smallTextShare: totalChars ? Math.round(smallChars / totalChars * 1e3) / 1e3 : 0,
     lineLength: p90,
     smallTapTargets: targets,
-    horizontalOverflow: document.documentElement.scrollWidth > window.innerWidth + 2,
+    horizontalOverflow: /width\s*=\s*device-width/.test(viewport) ? Math.max(document.documentElement.scrollWidth, window.innerWidth) > screen.width + 2 : document.documentElement.scrollWidth > window.innerWidth + 2,
     viewportMeta: /width\s*=\s*device-width/.test(viewport),
     fontFamilies: families.size,
     textColors: colors.size,
@@ -1141,7 +1153,15 @@ var NETWORKS = [
   ["pinterest", /pinterest\.[a-z]+\//i]
 ];
 var DAY = /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|po|út|st|čt|pá|so|ne|pondělí|úterý|středa|čtvrtek|pátek|sobota|neděle)\b/i;
-var TIME = /\b\d{1,2}[:.]\d{2}\b/;
+var TIME = /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2}\s?(?:am|pm)\b/i;
+var CLOSED = /\b(closed|zavřeno|zavreno|geschlossen|fermé|by appointment|po domluvě)\b/i;
+var POSTCODE = [
+  /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/,
+  new RegExp("\\b\\d{3}\\s?\\d{2}\\s+\\p{Lu}\\p{Ll}+", "u"),
+  /\b[A-Z]{2}\s\d{5}(?:-\d{4})?\b/,
+  new RegExp("\\b\\d{5}\\s+\\p{Lu}\\p{Ll}+", "u")
+];
+var STREET = new RegExp("\\p{L}{3,}.*\\s\\d+[a-z]?\\b|\\b\\d+[a-z]?\\s+\\p{L}{3,}", "u");
 function unique(items) {
   return [...new Set(items)];
 }
@@ -1179,15 +1199,33 @@ function findSocials(hrefs) {
 }
 function findHours(lines) {
   return unique(
-    lines.map((l) => l.replace(/\s+/g, " ").trim()).filter((l) => l.length < 120 && DAY.test(l) && TIME.test(l))
+    lines.map((l) => l.replace(/\s+/g, " ").trim()).filter((l) => l.length < 120 && DAY.test(l) && (TIME.test(l) || CLOSED.test(l)))
   ).slice(0, 14);
+}
+function looksLikeStreet(s) {
+  const rest = POSTCODE.reduce((acc, re) => acc.replace(re, ""), s);
+  return STREET.test(rest);
+}
+function findAddress(lines) {
+  for (const [i, raw] of lines.entries()) {
+    const line = raw.replace(/\s+/g, " ").trim();
+    if (line.length > 140 || !POSTCODE.some((re) => re.test(line))) continue;
+    const parts = line.split(/\s[·|•]\s/).map((p) => p.trim());
+    const k = parts.findIndex((p) => POSTCODE.some((re) => re.test(p)));
+    const hit = parts[k] ?? line;
+    if (looksLikeStreet(hit)) return hit;
+    const before = k > 0 ? parts[k - 1] : lines[i - 1]?.trim();
+    if (before && before.length < 60 && looksLikeStreet(before)) return `${before}, ${hit}`;
+    return hit;
+  }
+  return null;
 }
 function extractContact(input) {
   return {
     emails: findEmails(input.text, input.hrefs),
     phones: findPhones(input.text, input.hrefs),
     socials: findSocials(input.hrefs),
-    address: input.address?.replace(/\s+/g, " ").trim() || null,
+    address: input.address?.replace(/\s+/g, " ").trim() || findAddress(input.lines),
     hours: findHours(input.lines)
   };
 }
@@ -1263,16 +1301,20 @@ function findBusiness(pages) {
   }
   return null;
 }
+var GENERIC_TITLE = /^(welcome|home|homepage|index|main page|úvod|domů|vítejte|úvodní stránka|startseite|accueil|inicio)\b/i;
 function guessName(home, business) {
   if (business && typeof business.name === "string") return business.name;
-  const parts = home.title.split(/\s[|\-–—:·]\s/).map((s) => s.trim()).filter(Boolean);
-  if (parts.length > 1) {
-    return [...parts].sort((a, b) => a.length - b.length)[0] ?? home.title;
+  if (home.siteName) return home.siteName;
+  const parts = home.title.split(/\s[|\-–—:·]\s/).map((s) => s.trim()).filter((s) => s && !GENERIC_TITLE.test(s));
+  const copyright = home.lines.find((l) => /©|\(c\)|copyright/i.test(l)) ?? "";
+  const inCopyright = parts.find((p) => copyright.toLowerCase().includes(p.toLowerCase()));
+  if (inCopyright) return inCopyright;
+  const logoAlt = home.logo?.alt?.replace(/\s*logo\s*/i, "").trim();
+  if (logoAlt && logoAlt.length < 60) {
+    const match = parts.find((p) => p.toLowerCase().includes(logoAlt.toLowerCase()));
+    return match ?? logoAlt;
   }
-  if (home.logo?.alt && home.logo.alt.length < 60 && !/^logo$/i.test(home.logo.alt)) {
-    return home.logo.alt.replace(/\s*logo\s*/i, "").trim() || home.title;
-  }
-  return parts[0] ?? new URL(home.url).hostname;
+  return parts[0] ?? home.title ?? new URL(home.url).hostname;
 }
 function ldAddress(business) {
   const a = business?.address;
@@ -1311,11 +1353,16 @@ function buildBrand(pages, logoPath, faviconPath) {
   }
   return {
     name: guessName(home, business),
-    accent: pickAccent(palette),
+    accent: pickAccent(
+      buildPalette(
+        samples.filter((s) => s.kind !== "page"),
+        { limit: 12 }
+      )
+    ) ?? pickAccent(palette),
     themeColor: home.themeColor,
     palette,
     backgrounds: buildPalette(
-      samples.filter((s) => s.kind === "bg"),
+      samples.filter((s) => s.kind !== "text"),
       { limit: 6 }
     ),
     textColors: buildPalette(
@@ -1517,65 +1564,91 @@ async function dataUri(file) {
   return `data:image/png;base64,${(await readFile2(file)).toString("base64")}`;
 }
 function composeHtml(input) {
-  const panel = (label, side, accent) => `
-    <section class="panel">
+  const panel = (label, side, after) => `
+    <section class="panel${after ? " is-after" : ""}">
       <div class="head">
-        <span class="pill ${accent ? "pill-accent" : ""}">${label}</span>
-        <span class="score"><b>${side.score}</b>/100</span>
+        <span class="pill">${label}</span>
+        <span class="score"><b>${side.score}</b><i>/100</i></span>
       </div>
       <div class="stage">
         <div class="browser">
-          <div class="bar"><i></i><i></i><i></i></div>
-          <img class="desktop" src="${side.desktop}" alt="">
+          <div class="bar"><i></i><i></i><i></i><span></span></div>
+          <div class="shot"><img src="${side.desktop}" alt=""></div>
         </div>
         <div class="phone"><img src="${side.mobile}" alt=""></div>
       </div>
     </section>`;
   const deltas = input.deltas.map(
-    (d) => `<div class="delta"><span>${esc(d.label)}</span><b>${esc(d.before)} <em>\u2192</em> ${esc(d.after)}</b></div>`
+    (d) => `<div class="delta"><span>${esc(d.label)}</span><b>${esc(d.before)}<em>\u2192</em>${esc(d.after)}</b></div>`
   ).join("");
   return `<!doctype html><html><head><meta charset="utf-8"><style>
   * { box-sizing: border-box; margin: 0; }
-  body { width: 1600px; height: 1000px; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: radial-gradient(1200px 700px at 15% 0%, #1a2550 0%, transparent 60%), linear-gradient(160deg, #0d1330, #070b1c);
-    color: #e8ecf8; padding: 48px 56px; display: flex; flex-direction: column; gap: 28px; overflow: hidden; }
-  header { display: flex; justify-content: space-between; align-items: baseline; }
-  h1 { font-size: 34px; font-weight: 700; letter-spacing: -0.02em; }
-  h1 span { color: #8b96b8; font-weight: 500; }
-  .brand { color: #8b96b8; font-size: 18px; letter-spacing: 0.02em; }
-  .brand b { color: #e8ecf8; }
-  main { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; min-height: 0; }
-  .panel { display: flex; flex-direction: column; gap: 16px; min-height: 0; }
-  .head { display: flex; justify-content: space-between; align-items: center; }
-  .pill { font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 7px 14px;
-    border-radius: 999px; background: #1f2747; color: #aab4d4; }
-  .pill-accent { background: #5b8cff; color: #fff; }
-  .score { color: #8b96b8; font-size: 18px; }
-  .score b { color: #fff; font-size: 34px; font-weight: 700; letter-spacing: -0.02em; }
-  .stage { position: relative; flex: 1; }
-  .browser { position: absolute; inset: 0 70px 40px 0; border-radius: 12px; overflow: hidden; background: #fff;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08); }
-  .bar { height: 30px; background: #e9ebf0; display: flex; align-items: center; gap: 7px; padding: 0 12px; }
-  .bar i { width: 11px; height: 11px; border-radius: 50%; background: #c9ccd4; }
-  .desktop { width: 100%; height: auto; display: block; }
-  .phone { position: absolute; right: 0; bottom: 0; width: 176px; height: 362px; border-radius: 26px; padding: 7px;
-    background: #10131d; box-shadow: 0 24px 50px -12px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.12); }
-  .phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; border-radius: 20px; display: block; }
-  footer { display: grid; grid-template-columns: repeat(${Math.max(1, input.deltas.length)}, 1fr); gap: 16px; }
-  .delta { background: rgba(255,255,255,.04); border: 1px solid rgba(255,255,255,.08); border-radius: 12px; padding: 14px 18px;
-    display: flex; flex-direction: column; gap: 4px; }
-  .delta span { color: #8b96b8; font-size: 15px; }
-  .delta b { font-size: 24px; font-weight: 700; letter-spacing: -0.01em; }
-  .delta em { font-style: normal; color: #5b8cff; }
-  .accent-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 6px; background: #5b8cff; }
+  body { position: relative; width: 1600px; height: 1000px; overflow: hidden; padding: 52px 64px 60px;
+    display: flex; flex-direction: column; color: #f2f5ff;
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: radial-gradient(1100px 620px at 88% -8%, rgba(91,140,255,.22), transparent 62%),
+      radial-gradient(900px 600px at 0% 100%, rgba(91,140,255,.08), transparent 60%),
+      linear-gradient(155deg, #101a3c 0%, #0a1026 55%, #070b1a 100%); }
+  header { display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
+  .title { min-width: 0; }
+  .eyebrow { font-size: 19px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #5b8cff; }
+  .eyebrow span { color: #6f7ba3; font-weight: 600; }
+  h1 { margin-top: 10px; font-size: 50px; line-height: 1.1; font-weight: 800; letter-spacing: -.03em;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .host { margin-top: 6px; font-size: 24px; color: #8f9bc2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .total { flex: none; text-align: right; }
+  .total small { display: block; font-size: 19px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #6f7ba3; }
+  .total p { margin-top: 2px; font-size: 76px; line-height: 1; font-weight: 800; letter-spacing: -.04em;
+    font-variant-numeric: tabular-nums; }
+  .total s { text-decoration: none; color: #8f9bc2; }
+  .total em { font-style: normal; color: #5b8cff; margin: 0 16px; font-weight: 600; }
+  main { flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; margin-top: 34px; }
+  .panel { display: flex; flex-direction: column; min-height: 0; }
+  .head { display: flex; justify-content: space-between; align-items: center; height: 44px; }
+  .pill { font-size: 19px; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; padding: 8px 18px;
+    border-radius: 999px; background: rgba(255,255,255,.07); color: #aeb9dc; box-shadow: inset 0 0 0 1px rgba(255,255,255,.1); }
+  .is-after .pill { background: #5b8cff; color: #fff; box-shadow: none; }
+  .score { font-variant-numeric: tabular-nums; color: #8f9bc2; }
+  .score b { font-size: 36px; font-weight: 800; letter-spacing: -.03em; }
+  .score i { font-style: normal; font-size: 22px; color: #6f7ba3; margin-left: 2px; }
+  .is-after .score b { color: #fff; }
+  .stage { position: relative; flex: 1; min-height: 0; margin-top: 18px; }
+  .browser { position: absolute; left: 0; top: 0; right: 84px; border-radius: 14px; overflow: hidden; background: #fff;
+    box-shadow: 0 36px 70px -24px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.1); }
+  .is-after .browser { box-shadow: 0 36px 70px -24px rgba(0,0,0,.75), 0 0 0 2px #5b8cff; }
+  .bar { height: 34px; background: #e7eaf1; display: flex; align-items: center; gap: 8px; padding: 0 14px; }
+  .bar i { width: 12px; height: 12px; border-radius: 50%; background: #c3c8d4; }
+  .bar span { flex: 1; height: 16px; margin-left: 14px; border-radius: 8px; background: #f6f7fa; }
+  .shot { aspect-ratio: 1440 / 900; background: #fff; }
+  .shot img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  .phone { position: absolute; right: 0; bottom: 0; width: 196px; border-radius: 30px; padding: 8px; background: #0c0f1a;
+    box-shadow: 0 28px 56px -14px rgba(0,0,0,.8), 0 0 0 1px rgba(255,255,255,.16); }
+  .is-after .phone { box-shadow: 0 28px 56px -14px rgba(0,0,0,.8), 0 0 0 2px #5b8cff; }
+  .phone img { width: 100%; aspect-ratio: 390 / 844; object-fit: cover; object-position: top; border-radius: 22px;
+    display: block; background: #fff; }
+  footer { display: grid; grid-template-columns: repeat(${Math.max(1, input.deltas.length)}, 1fr); gap: 18px; margin-top: 30px; }
+  .delta { background: rgba(255,255,255,.045); box-shadow: inset 0 0 0 1px rgba(255,255,255,.09); border-radius: 14px;
+    padding: 16px 22px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .delta span { color: #9aa6cc; font-size: 20px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .delta b { font-size: 38px; line-height: 1; font-weight: 800; letter-spacing: -.02em; font-variant-numeric: tabular-nums;
+    white-space: nowrap; }
+  .delta em { font-style: normal; font-weight: 600; color: #5b8cff; margin: 0 12px; }
+  .accent-bar { position: absolute; left: 0; right: 0; bottom: 0; height: 10px; background: #5b8cff; }
 </style></head><body>
-  <header><h1>${esc(input.name)} <span>${esc(input.host)}</span></h1><div class="brand"><b>glowup</b> \xB7 score ${input.before.score} \u2192 ${input.after.score}</div></header>
+  <header>
+    <div class="title">
+      <p class="eyebrow">glowup <span>\xB7 before / after</span></p>
+      <h1>${esc(input.name)}</h1>
+      <p class="host">${esc(input.host)}</p>
+    </div>
+    <div class="total"><small>Audit score</small><p><s>${input.before.score}</s><em>\u2192</em>${input.after.score}</p></div>
+  </header>
   <main>${panel("Before", input.before, false)}${panel("After", input.after, true)}</main>
   ${deltas ? `<footer>${deltas}</footer>` : ""}
   <div class="accent-bar"></div>
 </body></html>`;
 }
-async function composeProof(browser, ws, slug = "home") {
+async function composeProof(browser, ws, slug = "home", label) {
   const before = JSON.parse(await readFile2(ws.audit, "utf8"));
   const after = JSON.parse(await readFile2(ws.auditAfter, "utf8"));
   const shots = (dir) => ({
@@ -1589,7 +1662,7 @@ async function composeProof(browser, ws, slug = "home") {
   }
   const html = composeHtml({
     name: before.name,
-    host: new URL(before.url).host || before.name,
+    host: label ?? (new URL(before.url).host || before.name),
     before: {
       desktop: await dataUri(b.desktop),
       mobile: await dataUri(b.mobile),
@@ -1617,7 +1690,7 @@ async function composeProof(browser, ws, slug = "home") {
 async function compose(opts) {
   const ws = workspace(opts.root, siteKey(normalizeUrl(opts.url)));
   return browserSession(async (browser) => {
-    const out = await composeProof(browser, ws);
+    const out = await composeProof(browser, ws, "home", opts.label);
     log.ok(`proof image written to ${out}`);
     return out;
   });
@@ -1790,7 +1863,7 @@ async function verify(opts) {
       proof = await composeProof(browser, ws);
       await writeFile3(join8(ws.proof, "delta.md"), deltaMarkdown(before, after));
       for (const row of deltaRows(before.totals, after.totals)) {
-        const mark = row.better ? "\u2713" : row.worse ? "\u2717" : " ";
+        const mark = row.better ? "\u2713" : row.worse ? row.key === "pageWeight" ? "!" : "\u2717" : " ";
         process.stderr.write(
           `  ${mark} ${row.label.padEnd(28)} ${row.before.padStart(8)} \u2192 ${row.after}
 `
@@ -1800,6 +1873,11 @@ async function verify(opts) {
   Score ${before.score} \u2192 ${after.score}
 
 `);
+      if (deltaRows(before.totals, after.totals).some((r) => r.key === "pageWeight" && r.worse)) {
+        log.warn(
+          "The new site is heavier than the original. Check image sizes; this does not fail verify."
+        );
+      }
       if (failures.length) {
         log.fail(`${failures.length} problems to fix:`);
         for (const f of failures) process.stderr.write(`  - ${f}
@@ -1831,6 +1909,7 @@ Options
   --pages <n>     pages to capture and audit, home included (default 5)
   --dist <dir>    built site to verify (default <root>/<site>/site/dist)
   --min-score <n> score the rebuilt site must reach (default 90)
+  --label <text>  host shown on the proof image (compose only)
   -h, --help
 `;
 async function main() {
@@ -1841,6 +1920,7 @@ async function main() {
       pages: { type: "string", default: "5" },
       dist: { type: "string" },
       "min-score": { type: "string", default: "90" },
+      label: { type: "string" },
       help: { type: "boolean", short: "h" }
     }
   });
@@ -1873,7 +1953,7 @@ async function main() {
       return result.passed ? 0 : 1;
     }
     case "compose":
-      await compose({ url: needUrl(), root });
+      await compose({ url: needUrl(), root, label: values.label });
       return 0;
     case "status":
       process.stdout.write(await status({ url: needUrl(), root }));

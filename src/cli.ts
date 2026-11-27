@@ -23,6 +23,7 @@ Options
   --pages <n>     pages to capture and audit, home included (default 5)
   --dist <dir>    built site to verify (default <root>/<site>/site/dist)
   --min-score <n> score the rebuilt site must reach (default 90)
+  --label <text>  host shown on the proof image (compose only)
   -h, --help
 `
 
@@ -34,6 +35,7 @@ async function main(): Promise<number> {
       pages: { type: 'string', default: '5' },
       dist: { type: 'string' },
       'min-score': { type: 'string', default: '90' },
+      label: { type: 'string' },
       help: { type: 'boolean', short: 'h' },
     },
   })
@@ -67,7 +69,7 @@ async function main(): Promise<number> {
       return result.passed ? 0 : 1
     }
     case 'compose':
-      await compose({ url: needUrl(), root })
+      await compose({ url: needUrl(), root, label: values.label })
       return 0
     case 'status':
       process.stdout.write(await status({ url: needUrl(), root }))

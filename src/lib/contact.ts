@@ -19,7 +19,15 @@ const NETWORKS: [string, RegExp][] = [
 ]
 const DAY =
   /\b(mon|tue|wed|thu|fri|sat|sun|monday|tuesday|wednesday|thursday|friday|saturday|sunday|po|út|st|čt|pá|so|ne|pondělí|úterý|středa|čtvrtek|pátek|sobota|neděle)\b/i
-const TIME = /\b\d{1,2}[:.]\d{2}\b/
+const TIME = /\b\d{1,2}[:.]\d{2}\b|\b\d{1,2}\s?(?:am|pm)\b/i
+const CLOSED = /\b(closed|zavřeno|zavreno|geschlossen|fermé|by appointment|po domluvě)\b/i
+const POSTCODE = [
+  /\b[A-Z]{1,2}\d[A-Z\d]?\s?\d[A-Z]{2}\b/,
+  /\b\d{3}\s?\d{2}\s+\p{Lu}\p{Ll}+/u,
+  /\b[A-Z]{2}\s\d{5}(?:-\d{4})?\b/,
+  /\b\d{5}\s+\p{Lu}\p{Ll}+/u,
+]
+const STREET = /\p{L}{3,}.*\s\d+[a-z]?\b|\b\d+[a-z]?\s+\p{L}{3,}/u
 
 function unique<T>(items: T[]): T[] {
   return [...new Set(items)]
@@ -70,8 +78,29 @@ export function findHours(lines: string[]): string[] {
   return unique(
     lines
       .map((l) => l.replace(/\s+/g, ' ').trim())
-      .filter((l) => l.length < 120 && DAY.test(l) && TIME.test(l)),
+      .filter((l) => l.length < 120 && DAY.test(l) && (TIME.test(l) || CLOSED.test(l))),
   ).slice(0, 14)
+}
+
+function looksLikeStreet(s: string): boolean {
+  const rest = POSTCODE.reduce((acc, re) => acc.replace(re, ''), s)
+  return STREET.test(rest)
+}
+
+/** Best guess at a postal address from visible lines when the page has no address markup. */
+export function findAddress(lines: string[]): string | null {
+  for (const [i, raw] of lines.entries()) {
+    const line = raw.replace(/\s+/g, ' ').trim()
+    if (line.length > 140 || !POSTCODE.some((re) => re.test(line))) continue
+    const parts = line.split(/\s[·|•]\s/).map((p) => p.trim())
+    const k = parts.findIndex((p) => POSTCODE.some((re) => re.test(p)))
+    const hit = parts[k] ?? line
+    if (looksLikeStreet(hit)) return hit
+    const before = k > 0 ? parts[k - 1] : lines[i - 1]?.trim()
+    if (before && before.length < 60 && looksLikeStreet(before)) return `${before}, ${hit}`
+    return hit
+  }
+  return null
 }
 
 export function extractContact(input: {
@@ -84,7 +113,7 @@ export function extractContact(input: {
     emails: findEmails(input.text, input.hrefs),
     phones: findPhones(input.text, input.hrefs),
     socials: findSocials(input.hrefs),
-    address: input.address?.replace(/\s+/g, ' ').trim() || null,
+    address: input.address?.replace(/\s+/g, ' ').trim() || findAddress(input.lines),
     hours: findHours(input.lines),
   }
 }
