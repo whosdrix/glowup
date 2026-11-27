@@ -1,0 +1,13 @@
+{
+  "name": "glowup",
+  "version": "0.1.0",
+  "description": "Give it a URL, get back a redesigned site with before/after proof.",
+  "author": {
+    "name": "whosdrix",
+    "url": "https://github.com/whosdrix"
+  },
+  "homepage": "https://github.com/whosdrix/glowup",
+  "repository": "https://github.com/whosdrix/glowup",
+  "license": "MIT",
+  "keywords": ["redesign", "web-design", "accessibility", "astro", "tailwindcss", "playwright"]
+}

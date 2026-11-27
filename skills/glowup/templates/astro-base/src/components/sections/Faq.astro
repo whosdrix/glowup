@@ -1,0 +1,77 @@
+---
+import Section from '../Section.astro'
+import SectionHeading from '../SectionHeading.astro'
+
+interface Props {
+  /** accordion: answers fold away. open: every answer visible, better when there are four or fewer. */
+  variant?: 'accordion' | 'open'
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  intro?: string
+  items: { q: string; a: string }[]
+}
+
+const { variant = 'accordion', id, tone, eyebrow, heading, intro, items } = Astro.props
+---
+
+<Section id={id} tone={tone}>
+  <div class="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+    <SectionHeading class="lg:sticky lg:top-10 lg:col-span-4 lg:self-start" eyebrow={eyebrow} heading={heading} intro={intro} />
+    {
+      variant === 'accordion' ? (
+        <div class="border-b border-line lg:col-span-7 lg:col-start-6">
+          {items.map((item, i) => (
+            <details class="faq border-t border-line" open={i === 0}>
+              <summary class="flex min-h-16 cursor-pointer list-none items-center justify-between gap-6 py-4 text-lg font-semibold">
+                {item.q}
+                <span class="faq-mark" aria-hidden="true" />
+              </summary>
+              <p class="max-w-measure pb-7 text-ink-muted">{item.a}</p>
+            </details>
+          ))}
+        </div>
+      ) : (
+        <dl class="lg:col-span-7 lg:col-start-6">
+          {items.map((item) => (
+            <div class="border-t border-line py-6">
+              <dt class="text-lg font-semibold">{item.q}</dt>
+              <dd class="mt-2 max-w-measure text-ink-muted">{item.a}</dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+  </div>
+</Section>
+
+<style>
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-mark {
+    position: relative;
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .faq-mark::before,
+  .faq-mark::after {
+    content: '';
+    position: absolute;
+    inset: calc(50% - 1px) 0 auto;
+    border-top: 2px solid var(--color-accent-text);
+    transition: transform 200ms ease;
+  }
+
+  .faq-mark::after {
+    transform: rotate(90deg);
+  }
+
+  .faq[open] .faq-mark::after {
+    transform: rotate(0deg);
+  }
+</style>

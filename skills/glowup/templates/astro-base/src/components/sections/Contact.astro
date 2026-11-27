@@ -1,0 +1,137 @@
+---
+import { site, telHref } from '../../lib/site'
+import Arrow from '../Arrow.astro'
+import Picture from '../Picture.astro'
+import Section from '../Section.astro'
+import SectionHeading from '../SectionHeading.astro'
+import HoursTable from './HoursTable.astro'
+
+interface Field {
+  name: string
+  label: string
+  type?: 'text' | 'email' | 'tel' | 'textarea'
+  required?: boolean
+}
+
+interface Props {
+  /** split: details on the left; hours, a form or an image on the right. simple: details only. */
+  variant?: 'split' | 'simple'
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  intro?: string
+  image?: string
+  showHours?: boolean
+  /** Only rendered when it has an action URL. A static site cannot receive a form on its own. */
+  form?: { action: string; fields: Field[] }
+}
+
+const { variant = 'split', id, tone, eyebrow, heading, intro, image, showHours = false, form } = Astro.props
+const { contact, labels } = site
+const hasForm = Boolean(form?.action && form.fields?.length)
+const hours = showHours && site.hours.length > 0
+const aside = variant === 'split' && (hasForm || hours || image)
+const big = 'display normal-case inline-flex min-h-11 items-center text-lg underline decoration-accent decoration-2 underline-offset-[0.3em] hover:decoration-current sm:text-xl xl:text-2xl'
+---
+
+<Section id={id} tone={tone}>
+  <div class="grid gap-x-12 gap-y-12 lg:grid-cols-12">
+    <div class:list={[aside ? 'lg:col-span-6' : 'lg:col-span-8']}>
+      <SectionHeading eyebrow={eyebrow} heading={heading} intro={intro} />
+
+      <dl class="mt-10 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+        {
+          contact.phone && (
+            <div class="sm:col-span-2">
+              <dt class="eyebrow">{labels.phone}</dt>
+              <dd>
+                <a class={big} href={telHref(contact.phone)}>{contact.phone}</a>
+              </dd>
+            </div>
+          )
+        }
+        {
+          contact.email && (
+            <div class="sm:col-span-2">
+              <dt class="eyebrow">{labels.email}</dt>
+              <dd>
+                <a class={`${big} [overflow-wrap:anywhere]`} href={`mailto:${contact.email}`}>{contact.email}</a>
+              </dd>
+            </div>
+          )
+        }
+        {
+          contact.address && contact.address.length > 0 && (
+            <div>
+              <dt class="eyebrow mb-2">{labels.address}</dt>
+              <dd>
+                <address class="not-italic">
+                  {contact.address.map((line) => (
+                    <span class="block">{line}</span>
+                  ))}
+                </address>
+                {contact.mapUrl && (
+                  <a class="link mt-2" href={contact.mapUrl} rel="noopener">
+                    {labels.directions}
+                    <Arrow />
+                  </a>
+                )}
+              </dd>
+            </div>
+          )
+        }
+      </dl>
+      {contact.note && <p class="mt-8 max-w-measure border-l-2 border-accent pl-4 text-ink-muted">{contact.note}</p>}
+    </div>
+
+    {
+      aside && (
+        <div class="lg:col-span-5 lg:col-start-8">
+          {hasForm && form ? (
+            <form class="grid gap-5" action={form.action} method="post">
+              {form.fields.map((field) => (
+                <label class="grid gap-2 text-sm font-semibold">
+                  {field.label}
+                  {field.type === 'textarea' ? (
+                    <textarea class="field min-h-36" name={field.name} required={field.required} />
+                  ) : (
+                    <input
+                      class="field"
+                      type={field.type ?? 'text'}
+                      name={field.name}
+                      required={field.required}
+                      autocomplete={field.type === 'email' ? 'email' : field.type === 'tel' ? 'tel' : undefined}
+                    />
+                  )}
+                </label>
+              ))}
+              <button class="btn btn-primary justify-self-start" type="submit">{labels.send}</button>
+            </form>
+          ) : hours ? (
+            <div class="rounded-(--image-radius) bg-surface p-6 sm:p-9">
+              <h3 class="display mb-5 text-xl">{labels.hours}</h3>
+              <HoursTable />
+            </div>
+          ) : (
+            image && <Picture image={image} ratio="4/5" sizes="(min-width: 64rem) 38vw, 100vw" class="max-lg:aspect-[4/3]!" />
+          )}
+        </div>
+      )
+    }
+  </div>
+</Section>
+
+<style>
+  .field {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.9rem;
+    border: var(--rule-weight) solid var(--color-ink-muted);
+    border-radius: var(--radius-md);
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-size: var(--text-base);
+    font-weight: 400;
+  }
+</style>

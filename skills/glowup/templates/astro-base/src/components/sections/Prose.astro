@@ -1,0 +1,82 @@
+---
+import Picture from '../Picture.astro'
+import Section from '../Section.astro'
+
+interface Block {
+  kind: 'heading' | 'paragraph' | 'list' | 'quote' | 'image' | 'table'
+  text?: string
+  level?: number
+  items?: string[]
+  rows?: string[][]
+  image?: string
+}
+
+interface Props {
+  id?: string
+  tone?: string
+  /** Long-form copy, in the same block shapes the capture step produces. */
+  blocks: Block[]
+}
+
+const { id, tone, blocks } = Astro.props
+---
+
+<Section id={id} tone={tone} space="tight">
+  <div class="prose-link max-w-measure lg:ml-[16.666%]">
+    {
+      blocks.map((block) => {
+        if (block.kind === 'heading') {
+          return (block.level ?? 2) <= 2 ? (
+            <h2 class="display mt-12 mb-4 text-2xl first:mt-0">{block.text}</h2>
+          ) : (
+            <h3 class="mt-8 mb-2 text-lg font-semibold">{block.text}</h3>
+          )
+        }
+        if (block.kind === 'paragraph') return <p class="mb-5">{block.text}</p>
+        if (block.kind === 'list') {
+          return (
+            <ul class="mb-6 border-b border-line">
+              {(block.items ?? []).map((item) => (
+                <li class="border-t border-line py-3">{item}</li>
+              ))}
+            </ul>
+          )
+        }
+        if (block.kind === 'quote') {
+          return (
+            <blockquote class="display my-8 border-l-2 border-accent pl-6 text-xl">
+              <p>{block.text}</p>
+            </blockquote>
+          )
+        }
+        if (block.kind === 'image' && block.image) return <Picture image={block.image} sizes="(min-width: 48rem) 36rem, 100vw" class="my-8" />
+        if (block.kind === 'table' && block.rows?.length) {
+          const [head, ...body] = block.rows
+          return (
+            <div class="my-8 overflow-x-auto" tabindex="0" role="region" aria-label={head?.join(', ')}>
+              <table class="w-full border-collapse text-left text-sm">
+                <thead>
+                  <tr>
+                    {head?.map((cell) => (
+                      <th scope="col" class="border-b-2 border-ink py-3 pr-6 font-semibold">{cell}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {body.map((row) => (
+                    <tr>
+                      {row.map((cell) => (
+                        <td class="border-b border-line py-3 pr-6">{cell}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )
+        }
+        return null
+      })
+    }
+  </div>
+</Section>

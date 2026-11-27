@@ -1,0 +1,27 @@
+---
+import Picture from '../Picture.astro'
+import Section from '../Section.astro'
+import SectionHeading from '../SectionHeading.astro'
+import HoursTable from './HoursTable.astro'
+
+interface Props {
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  intro?: string
+  image?: string
+}
+
+const { id, tone, eyebrow, heading, intro, image } = Astro.props
+---
+
+<Section id={id} tone={tone}>
+  <div class="grid gap-x-12 gap-y-10 lg:grid-cols-12">
+    <div class="lg:col-span-5">
+      <SectionHeading eyebrow={eyebrow} heading={heading} intro={intro} />
+      {image && <Picture image={image} ratio="3/2" sizes="(min-width: 64rem) 38vw, 100vw" class="mt-10" />}
+    </div>
+    <HoursTable class="lg:col-span-6 lg:col-start-7 lg:pt-2" />
+  </div>
+</Section>

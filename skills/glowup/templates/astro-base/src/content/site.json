@@ -1,0 +1,407 @@
+{
+  "meta": {
+    "lang": "en-GB",
+    "url": "https://saltmarshpottery.example",
+    "title": "Saltmarsh Pottery | Pottery classes and studio in Wrenmouth",
+    "description": "A teaching pottery and shared studio on Quay Lane, Wrenmouth. Two-hour tasters, eight-week wheel courses, studio membership and a firing service.",
+    "ogImage": "shelves",
+    "themeColor": "#f5efe6"
+  },
+  "business": {
+    "name": "Saltmarsh Pottery",
+    "tagline": "Pottery classes and shared studio in Wrenmouth"
+  },
+  "nav": [
+    { "label": "Classes", "href": "/classes/" },
+    { "label": "The studio", "href": "/about/" },
+    { "label": "Visit", "href": "/visit/" }
+  ],
+  "cta": { "label": "Book a class", "href": "/classes/" },
+  "contact": {
+    "phone": "01632 960417",
+    "email": "hello@saltmarshpottery.example",
+    "address": ["The Sail Loft", "14 Quay Lane", "Wrenmouth WR4 2QL"],
+    "mapUrl": "https://www.openstreetmap.org/",
+    "note": "The studio is up one flight of stairs. Ring the bell by the blue door and someone will come down to help with bags or boxes."
+  },
+  "hours": [
+    { "label": "Monday", "value": "Closed" },
+    { "label": "Tuesday to Friday", "value": "10:00 to 21:00" },
+    { "label": "Saturday", "value": "09:30 to 17:00" },
+    { "label": "Sunday", "value": "Members only" }
+  ],
+  "hoursNote": "Evening classes run until 21:00. The shop shelf closes at 17:30.",
+  "socials": [
+    { "label": "Instagram", "href": "https://instagram.com/" }
+  ],
+  "images": {
+    "shelves": {
+      "src": "shelves.jpg",
+      "focus": "50% 0%",
+      "alt": "Four wooden shelves of glazed vases, jugs, bowls and cups in rust, green, ochre and pale blue.",
+      "caption": "Finished work on the collection shelves."
+    },
+    "wheel": {
+      "src": "wheel.jpg",
+      "alt": "A potter's wheel with a tall, freshly thrown pot on it, a bucket of water beside it and a stool holding a bowl and a cup.",
+      "caption": "One of the twelve wheels in the throwing room."
+    },
+    "kiln": {
+      "src": "kiln.jpg",
+      "alt": "A front-loading kiln with its door open, three shelves of pots inside.",
+      "caption": "Loading the big kiln for a glaze firing."
+    },
+    "studio": {
+      "src": "studio.jpg",
+      "alt": "The studio's long work table under a window, with pots on a wall shelf and aprons hanging from pegs.",
+      "caption": "The hand-building table."
+    },
+    "tools": {
+      "src": "tools.jpg",
+      "alt": "Pottery tools laid out on a board: a wooden rib, a cutting wire, a sponge, brushes, loop tools and a dish of slip.",
+      "caption": "Every bench has its own set of tools."
+    },
+    "bowls": {
+      "src": "bowls.jpg",
+      "alt": "Five glazed bowls and plates seen from above, with a wooden spoon.",
+      "caption": "Stoneware bowls in the studio glazes."
+    },
+    "mugs": {
+      "src": "mugs.jpg",
+      "alt": "A row of five handmade mugs, each dipped in a different coloured glaze.",
+      "caption": "Mugs from the spring wheel course."
+    },
+    "tiles": {
+      "src": "tiles.jpg",
+      "alt": "A board of sixteen square test tiles, each showing a different glaze colour.",
+      "caption": "The glaze board: sixteen glazes mixed in house."
+    }
+  },
+  "home": {
+    "sections": [
+      {
+        "type": "hero",
+        "variant": "split",
+        "eyebrow": "Pottery studio on Quay Lane, Wrenmouth",
+        "heading": "Learn to throw pots in an old sail loft *by the quay.*",
+        "lede": "Saltmarsh is a teaching pottery and shared studio. Come for a two-hour taster, an eight-week course, or a shelf and a wheel of your own.",
+        "image": "shelves",
+        "caption": "Finished work on the collection shelves.",
+        "actions": [
+          { "label": "See classes and prices", "href": "/classes/" },
+          { "label": "Plan a visit", "href": "/visit/" }
+        ],
+        "facts": [
+          { "label": "Open", "value": "Tuesday to Saturday" },
+          { "label": "Find us", "value": "14 Quay Lane", "href": "/visit/" },
+          { "label": "Call", "value": "01632 960417", "href": "tel:01632960417" }
+        ]
+      },
+      {
+        "type": "services",
+        "variant": "list",
+        "id": "classes",
+        "eyebrow": "Classes and studio time",
+        "heading": "Four ways to get your hands in the clay",
+        "intro": "Classes are capped at eight people, so there is always a wheel each and a tutor nearby.",
+        "link": { "label": "Dates and booking", "href": "/classes/" },
+        "items": [
+          {
+            "title": "Taster session",
+            "text": "Two hours on the wheel with a tutor. You keep your best two pots, which we glaze and fire for you.",
+            "meta": "£45",
+            "detail": "2 hours"
+          },
+          {
+            "title": "Eight-week wheel course",
+            "text": "One evening a week. Centring, pulling walls, trimming and glazing, in that order and at your own pace.",
+            "meta": "£240",
+            "detail": "8 evenings, clay included"
+          },
+          {
+            "title": "Hand-building evenings",
+            "text": "Pinch, coil and slab work around the long table. Drop in when you like; no booking past the first visit.",
+            "meta": "£22",
+            "detail": "Thursdays, 18:30"
+          },
+          {
+            "title": "Studio membership",
+            "text": "Your own shelf, a key, and the wheels whenever a class is not running. Glazes and firing are included.",
+            "meta": "£95 a month",
+            "detail": "One month's notice"
+          }
+        ]
+      },
+      {
+        "type": "about",
+        "variant": "image-left",
+        "tone": "surface",
+        "eyebrow": "The studio",
+        "heading": "A working pottery, not a showroom",
+        "image": "wheel",
+        "imageSecondary": "tiles",
+        "body": [
+          "Nell Harcourt opened Saltmarsh in 2011 with two second-hand wheels and a kiln bought from a school that was closing its art block.",
+          "It is still a place where things get made. There is slip on the floor, test tiles on every sill, and usually a kettle on. Members work alongside classes, which is how most people here learned the things no course covers."
+        ],
+        "points": [
+          { "title": "Stoneware, fired to 1240°C", "text": "Everything made here is safe for food, ovens and dishwashers." },
+          { "title": "Glazes mixed in house", "text": "Sixteen on the board at the moment, all lead-free." }
+        ],
+        "link": { "label": "More about the studio", "href": "/about/" }
+      },
+      {
+        "type": "stats",
+        "items": [
+          { "value": "2011", "label": "The year the studio opened" },
+          { "value": "12", "label": "Wheels in the throwing room" },
+          { "value": "3", "label": "Kilns, two electric and one gas" },
+          { "value": "8", "label": "People at most in any class" }
+        ]
+      },
+      {
+        "type": "gallery",
+        "variant": "mosaic",
+        "eyebrow": "Out of the kiln",
+        "heading": "What people have been making",
+        "intro": "Student and member work from recent firings. Most of it has gone home by now.",
+        "images": ["bowls", "mugs", "tools", "kiln", "studio"]
+      },
+      {
+        "type": "testimonials",
+        "variant": "feature",
+        "tone": "ink",
+        "eyebrow": "From people who have been",
+        "heading": "What students say",
+        "items": [
+          {
+            "quote": "I came for a taster and stayed three years. Nobody rushes you, and nobody pretends your first bowl is any good.",
+            "name": "Priya N.",
+            "detail": "Member since 2022"
+          },
+          {
+            "quote": "The eight weeks went quickly. By week five I had made a mug I now use every morning.",
+            "name": "Tom A.",
+            "detail": "Wheel course"
+          },
+          {
+            "quote": "We booked the taster for a birthday. All six of us got a wheel, and our pots were ready in a fortnight.",
+            "name": "Hannah R.",
+            "detail": "Taster session"
+          }
+        ]
+      },
+      {
+        "type": "faq",
+        "variant": "accordion",
+        "eyebrow": "Before you book",
+        "heading": "Questions we get asked a lot",
+        "items": [
+          { "q": "Do I need any experience?", "a": "No. The taster and the eight-week course both start from nothing. If you have thrown before, tell the tutor and they will set you something harder." },
+          { "q": "What should I wear?", "a": "Clothes you do not mind getting clay on, and short nails if you can manage it. Aprons and towels are here." },
+          { "q": "When do I get my pots?", "a": "About two weeks after you make them. They have to dry, be fired once, glazed, and fired again. We email when they are on the collection shelf." },
+          { "q": "Can I bring children?", "a": "Tasters are for ages twelve and up, with an adult. Saturday morning family sessions take ages six and up." },
+          { "q": "Do you fire work made elsewhere?", "a": "Yes, if it is stoneware clay from a supplier we know. Bring the bag label with you the first time." }
+        ]
+      },
+      {
+        "type": "contact",
+        "variant": "split",
+        "tone": "surface",
+        "id": "visit",
+        "eyebrow": "Visit",
+        "heading": "Up the stairs behind the chandlery",
+        "intro": "Call in whenever we are open. Someone will show you round, and there is no need to book for a look.",
+        "showHours": true
+      },
+      {
+        "type": "cta",
+        "variant": "split",
+        "tone": "accent",
+        "heading": "New wheel courses start every January, April and September.",
+        "text": "Places go to the waiting list first, so it is worth adding your name.",
+        "actions": [
+          { "label": "See course dates", "href": "/classes/", "style": "primary" },
+          { "label": "Call the studio", "href": "tel:01632960417", "style": "secondary" }
+        ]
+      }
+    ]
+  },
+  "pages": [
+    {
+      "slug": "classes",
+      "title": "Classes and *studio time*",
+      "description": "Taster sessions, eight-week wheel courses, hand-building evenings, studio membership and kiln firing at Saltmarsh Pottery, Wrenmouth.",
+      "eyebrow": "Classes",
+      "intro": "Every class is taught by a working potter, with eight people at most. Clay, glazes and firing are included in the price unless it says otherwise.",
+      "sections": [
+        {
+          "type": "services",
+          "variant": "cards",
+          "heading": "What you can book",
+          "items": [
+            {
+              "title": "Taster session",
+              "text": "Two hours on the wheel with a tutor. You keep your best two pots, which we glaze and fire for you.",
+              "meta": "£45",
+              "detail": "2 hours",
+              "image": "wheel"
+            },
+            {
+              "title": "Eight-week wheel course",
+              "text": "One evening a week. Centring, pulling walls, trimming and glazing, in that order and at your own pace.",
+              "meta": "£240",
+              "detail": "8 evenings"
+            },
+            {
+              "title": "Hand-building evenings",
+              "text": "Pinch, coil and slab work around the long table. Drop in when you like.",
+              "meta": "£22",
+              "detail": "Thursdays, 18:30"
+            },
+            {
+              "title": "Studio membership",
+              "text": "Your own shelf, a key, and the wheels whenever a class is not running.",
+              "meta": "£95 a month",
+              "detail": "Glazes and firing included"
+            },
+            {
+              "title": "Firing service",
+              "text": "Bisque and glaze firings for work made at home, charged by weight.",
+              "meta": "From £4 a kilo",
+              "detail": "Stoneware only"
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "variant": "open",
+          "tone": "surface",
+          "heading": "Good to know",
+          "items": [
+            { "q": "How do I book?", "a": "Call or email the studio. We take payment when we confirm your place, and you can move a booking up to a week before." },
+            { "q": "What if I miss a week?", "a": "You can make up one missed evening by joining another group in the same term, if there is a free wheel." },
+            { "q": "Are gift vouchers available?", "a": "Yes, for tasters and for any amount. They are valid for a year." }
+          ]
+        },
+        {
+          "type": "cta",
+          "heading": "Not sure which class fits? *Ask us.*",
+          "actions": [
+            { "label": "01632 960417", "href": "tel:01632960417", "style": "primary" },
+            { "label": "Email the studio", "href": "mailto:hello@saltmarshpottery.example", "style": "secondary" }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "about",
+      "title": "The studio",
+      "description": "Saltmarsh Pottery has been teaching in the Sail Loft on Quay Lane since 2011. Twelve wheels, three kilns and sixteen house glazes.",
+      "eyebrow": "About",
+      "intro": "Twelve wheels, three kilns and a long table, in a loft where sails were once cut and stitched.",
+      "sections": [
+        {
+          "type": "about",
+          "variant": "image-right",
+          "heading": "How it started",
+          "image": "kiln",
+          "body": [
+            "Nell Harcourt trained as a production thrower in Stoke-on-Trent and moved to Wrenmouth in 2009. She opened Saltmarsh two years later with two second-hand wheels and a kiln from a school that was closing its art block.",
+            "The loft had been empty since the sailmakers left. It has north light, a hoist that still works and a floor that slopes just enough to notice."
+          ],
+          "signoff": "Nell Harcourt, founder"
+        },
+        {
+          "type": "stats",
+          "tone": "surface",
+          "items": [
+            { "value": "2011", "label": "The year the studio opened" },
+            { "value": "12", "label": "Wheels in the throwing room" },
+            { "value": "3", "label": "Kilns, two electric and one gas" },
+            { "value": "16", "label": "Glazes mixed in house" }
+          ]
+        },
+        {
+          "type": "gallery",
+          "variant": "grid",
+          "heading": "Around the loft",
+          "images": ["studio", "tiles", "tools", "shelves", "bowls", "mugs"]
+        },
+        {
+          "type": "testimonials",
+          "variant": "columns",
+          "tone": "ink",
+          "heading": "What students say",
+          "items": [
+            { "quote": "I came for a taster and stayed three years. Nobody rushes you.", "name": "Priya N.", "detail": "Member since 2022" },
+            { "quote": "By week five I had made a mug I now use every morning.", "name": "Tom A.", "detail": "Wheel course" },
+            { "quote": "All six of us got a wheel, and our pots were ready in a fortnight.", "name": "Hannah R.", "detail": "Taster session" }
+          ]
+        }
+      ]
+    },
+    {
+      "slug": "visit",
+      "title": "Visit the studio",
+      "description": "Opening hours, address and directions for Saltmarsh Pottery, The Sail Loft, 14 Quay Lane, Wrenmouth.",
+      "eyebrow": "Visit",
+      "intro": "We are on Quay Lane, two minutes from the harbour car park, up the stairs behind the chandlery.",
+      "sections": [
+        {
+          "type": "hours",
+          "heading": "Opening hours",
+          "intro": "Drop in for a look round whenever we are open.",
+          "image": "mugs"
+        },
+        {
+          "type": "contact",
+          "variant": "split",
+          "tone": "surface",
+          "heading": "Get in touch",
+          "image": "tools"
+        }
+      ]
+    },
+    {
+      "slug": "privacy",
+      "title": "Privacy",
+      "description": "How Saltmarsh Pottery uses the details you give us when you book.",
+      "sections": [
+        {
+          "type": "prose",
+          "blocks": [
+            { "kind": "paragraph", "text": "We keep as little about you as we can. This page says what we hold and why." },
+            { "kind": "heading", "level": 2, "text": "What we keep" },
+            { "kind": "list", "items": ["Your name, email address and phone number, so we can confirm a booking.", "The classes you have booked and paid for.", "Anything you tell us that affects your class, such as access needs."] },
+            { "kind": "heading", "level": 2, "text": "What we do not do" },
+            { "kind": "paragraph", "text": "We do not sell or share your details, and this website sets no tracking cookies. We email you about a booking, and about new course dates only if you asked to join the waiting list." },
+            { "kind": "heading", "level": 2, "text": "Asking for your details" },
+            { "kind": "paragraph", "text": "Email the studio and we will send you everything we hold, correct it or delete it, whichever you ask for." }
+          ]
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "blurb": "A teaching pottery and shared studio in the Sail Loft on Quay Lane, Wrenmouth.",
+    "links": [{ "label": "Privacy", "href": "/privacy/" }],
+    "note": "Example content for a fictional business."
+  },
+  "labels": {
+    "skip": "Skip to content",
+    "menu": "Menu",
+    "home": "Home",
+    "breadcrumb": "Breadcrumb",
+    "footerNav": "Pages",
+    "contact": "Contact",
+    "details": "Details",
+    "phone": "Phone",
+    "email": "Email",
+    "address": "Address",
+    "hours": "Opening hours",
+    "directions": "Get directions",
+    "send": "Send message",
+    "notFound": "Page not found"
+  }
+}

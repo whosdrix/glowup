@@ -1,0 +1,20 @@
+---
+interface Props {
+  id?: string
+  tone?: string
+  /** "tight" halves the vertical padding, for bands that sit between two full sections. */
+  space?: 'normal' | 'tight'
+  class?: string
+}
+
+const { id, tone, space = 'normal', class: cls = '' } = Astro.props
+---
+
+<section
+  id={id}
+  class:list={[tone && `tone-${tone}`, space === 'tight' ? 'py-block' : 'py-section', 'scroll-mt-8', cls]}
+>
+  <div class="mx-auto max-w-page px-gutter">
+    <slot />
+  </div>
+</section>

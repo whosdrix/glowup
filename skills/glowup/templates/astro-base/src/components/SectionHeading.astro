@@ -1,0 +1,20 @@
+---
+import { rich } from '../lib/site'
+
+interface Props {
+  eyebrow?: string
+  heading?: string
+  intro?: string
+  size?: '2xl' | '3xl'
+  class?: string
+}
+
+const { eyebrow, heading, intro, size = '3xl', class: cls = '' } = Astro.props
+---
+
+<div class={cls}>
+  {eyebrow && <p class="eyebrow mb-4">{eyebrow}</p>}
+  {heading && <h2 class:list={['display', size === '3xl' ? 'text-3xl' : 'text-2xl']} set:html={rich(heading)} />}
+  {intro && <p class="mt-5 max-w-measure text-lg text-ink-muted">{intro}</p>}
+  <slot />
+</div>

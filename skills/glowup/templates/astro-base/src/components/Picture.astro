@@ -1,0 +1,51 @@
+---
+import { Image } from 'astro:assets'
+import { resolveImage } from '../lib/site'
+
+interface Props {
+  image: string
+  /** CSS aspect-ratio for the frame, e.g. "4/5". Without it the image keeps its own shape. */
+  ratio?: string
+  sizes?: string
+  loading?: 'lazy' | 'eager'
+  rounded?: boolean
+  class?: string
+}
+
+const { image, ratio, sizes = '100vw', loading = 'lazy', rounded = true, class: cls = '' } = Astro.props
+const img = resolveImage(image)
+const widths =
+  typeof img.src === 'string' ? [] : [...new Set([480, 800, 1200, 1600].filter((w) => w < img.width).concat(img.width))]
+const fit = ratio ? 'h-full w-full object-cover' : 'h-auto w-full'
+---
+
+<div
+  class:list={['overflow-hidden bg-surface', rounded && 'rounded-(--image-radius)', cls]}
+  style={ratio ? `aspect-ratio:${ratio}` : `aspect-ratio:${img.width}/${img.height}`}
+>
+  {
+    typeof img.src === 'string' ? (
+      <img
+        src={img.src}
+        alt={img.alt}
+        width={img.width}
+        height={img.height}
+        loading={loading}
+        decoding="async"
+        class={fit}
+        style={`object-position:${img.focus}`}
+      />
+    ) : (
+      <Image
+        src={img.src}
+        alt={img.alt}
+        widths={widths}
+        sizes={sizes}
+        loading={loading}
+        fetchpriority={loading === 'eager' ? 'high' : undefined}
+        class={fit}
+        style={`object-position:${img.focus}`}
+      />
+    )
+  }
+</div>

@@ -1,0 +1,75 @@
+---
+import Section from '../Section.astro'
+
+interface Item {
+  quote: string
+  name: string
+  detail?: string
+}
+
+interface Props {
+  /** feature: one large quote, the rest stacked beside it. columns: equal columns. */
+  variant?: 'feature' | 'columns'
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  /** Real quotes copied from the source site only. */
+  items: Item[]
+}
+
+const { variant = 'feature', id, tone, eyebrow, heading, items } = Astro.props
+const [first, ...rest] = items
+const layout = variant === 'feature' && first ? 'feature' : 'columns'
+---
+
+<Section id={id} tone={tone}>
+  {eyebrow && <p class="eyebrow mb-4">{eyebrow}</p>}
+  {heading && <h2 class:list={[layout === 'feature' ? 'sr-only' : 'display mb-block text-3xl']}>{heading}</h2>}
+
+  {
+    layout === 'feature' && first ? (
+      <div class="grid gap-x-16 gap-y-12 lg:grid-cols-12">
+        <figure class="lg:col-span-7">
+          <span class="display block h-14 text-[6rem] leading-none text-accent-text" aria-hidden="true">&ldquo;</span>
+          <blockquote class="display mt-4 text-2xl leading-snug lg:text-3xl lg:leading-[1.16]">
+            <p>{first.quote}</p>
+          </blockquote>
+          <figcaption class="mt-8 flex flex-wrap items-baseline gap-x-3">
+            <span class="font-semibold">{first.name}</span>
+            {first.detail && <span class="text-sm text-ink-muted">{first.detail}</span>}
+          </figcaption>
+        </figure>
+        {rest.length > 0 && (
+          <div class="lg:col-span-4 lg:col-start-9 lg:pt-4">
+            {rest.map((item) => (
+              <figure class="border-t border-line py-7 last:pb-0">
+                <blockquote>
+                  <p>{item.quote}</p>
+                </blockquote>
+                <figcaption class="mt-4">
+                  <span class="block font-semibold">{item.name}</span>
+                  {item.detail && <span class="block text-sm text-ink-muted">{item.detail}</span>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        )}
+      </div>
+    ) : (
+      <div class="grid gap-x-10 md:grid-cols-2 lg:grid-cols-3">
+        {items.map((item) => (
+          <figure class="flex flex-col border-t border-line py-7">
+            <blockquote class="text-lg">
+              <p>{item.quote}</p>
+            </blockquote>
+            <figcaption class="mt-auto pt-6">
+              <span class="block font-semibold">{item.name}</span>
+              {item.detail && <span class="block text-sm text-ink-muted">{item.detail}</span>}
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    )
+  }
+</Section>

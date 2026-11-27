@@ -1,0 +1,41 @@
+---
+import type { Action } from '../../lib/site'
+import { rich } from '../../lib/site'
+import Actions from '../Actions.astro'
+import Section from '../Section.astro'
+
+interface Props {
+  /** split: heading left, actions right. stacked: one centred column, for short headings only. */
+  variant?: 'split' | 'stacked'
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading: string
+  text?: string
+  actions?: Action[]
+}
+
+const { variant = 'split', id, tone = 'accent', eyebrow, heading, text, actions } = Astro.props
+---
+
+<Section id={id} tone={tone} space="tight">
+  {
+    variant === 'split' ? (
+      <div class="grid items-end gap-x-12 gap-y-8 lg:grid-cols-12">
+        <div class="lg:col-span-8">
+          {eyebrow && <p class="eyebrow mb-4">{eyebrow}</p>}
+          <h2 class="display max-w-[22ch] text-3xl" set:html={rich(heading)} />
+          {text && <p class="mt-5 max-w-measure text-lg">{text}</p>}
+        </div>
+        <Actions actions={actions} class="lg:col-span-4 lg:justify-end" />
+      </div>
+    ) : (
+      <div class="mx-auto flex max-w-measure flex-col items-center text-center">
+        {eyebrow && <p class="eyebrow mb-4">{eyebrow}</p>}
+        <h2 class="display text-3xl" set:html={rich(heading)} />
+        {text && <p class="mt-5 text-lg">{text}</p>}
+        <Actions actions={actions} class="mt-8 justify-center" />
+      </div>
+    )
+  }
+</Section>

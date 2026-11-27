@@ -1,0 +1,89 @@
+---
+import { site, telHref } from '../../lib/site'
+
+const { business, nav, contact, hours, socials, footer, labels } = site
+const year = new Date().getFullYear()
+const item = 'inline-flex min-h-11 items-center underline decoration-transparent decoration-2 underline-offset-4 transition-colors hover:decoration-accent'
+---
+
+<footer class="tone-ink">
+  <div class="mx-auto max-w-page px-gutter pt-section pb-10">
+    <div class="grid gap-x-10 gap-y-12 md:grid-cols-2 xl:grid-cols-12">
+      <div class="xl:col-span-4">
+        <p class="display text-3xl">{business.name}</p>
+        {footer.blurb && <p class="mt-5 max-w-[38ch] text-ink-muted">{footer.blurb}</p>}
+      </div>
+
+      <nav class="xl:col-span-2" aria-label={labels.footerNav}>
+        <h2 class="eyebrow mb-3">{labels.footerNav}</h2>
+        <ul>
+          {
+            nav.map((link) => (
+              <li>
+                <a class={item} href={link.href}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+
+      <div class="xl:col-span-3">
+        <h2 class="eyebrow mb-3">{labels.contact}</h2>
+        <ul>
+          {
+            contact.phone && (
+              <li>
+                <a class={item} href={telHref(contact.phone)}>{contact.phone}</a>
+              </li>
+            )
+          }
+          {
+            contact.email && (
+              <li>
+                <a class={`${item} [overflow-wrap:anywhere]`} href={`mailto:${contact.email}`}>{contact.email}</a>
+              </li>
+            )
+          }
+        </ul>
+        {
+          contact.address && (
+            <address class="mt-3 text-ink-muted not-italic">
+              {contact.address.map((line) => (
+                <span class="block">{line}</span>
+              ))}
+            </address>
+          )
+        }
+      </div>
+
+      {
+        hours.length > 0 && (
+          <div class="xl:col-span-3">
+            <h2 class="eyebrow mb-3">{labels.hours}</h2>
+            <dl class="mt-5 space-y-2">
+              {hours.map((row) => (
+                <div class="flex justify-between gap-6">
+                  <dt class="text-ink-muted">{row.label}</dt>
+                  <dd class="tabular-nums">{row.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        )
+      }
+    </div>
+
+    <div class="mt-block flex flex-wrap items-center justify-between gap-x-10 gap-y-2 border-t border-line pt-6 text-sm">
+      <p class="text-ink-muted">&copy; {year} {business.name}{footer.note && `. ${footer.note}`}</p>
+      <ul class="flex flex-wrap gap-x-7">
+        {
+          [...socials, ...(footer.links ?? [])].map((link) => (
+            <li>
+              <a class={item} href={link.href} rel={/^https?:/.test(link.href) ? 'noopener' : undefined}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</footer>

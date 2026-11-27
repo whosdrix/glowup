@@ -1,0 +1,24 @@
+---
+import PageHeader from '../components/PageHeader.astro'
+import Sections from '../components/Sections.astro'
+import Base from '../layouts/Base.astro'
+import type { PageData } from '../lib/site'
+import { plain, site } from '../lib/site'
+
+export function getStaticPaths() {
+  return site.pages.map((page) => ({ params: { slug: page.slug }, props: { page } }))
+}
+
+interface Props {
+  page: PageData
+}
+
+const { page } = Astro.props
+// A page that opens with a hero takes its h1 from there instead.
+const opensWithHero = page.sections[0]?.type === 'hero'
+---
+
+<Base title={plain(page.title)} description={page.description}>
+  {!opensWithHero && <PageHeader title={page.title} eyebrow={page.eyebrow} intro={page.intro} />}
+  <Sections sections={page.sections} hasPageHeading={!opensWithHero} />
+</Base>

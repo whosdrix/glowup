@@ -1,0 +1,78 @@
+---
+import { getImage } from 'astro:assets'
+import Footer from '../components/sections/Footer.astro'
+import Header from '../components/sections/Header.astro'
+import { preloadFonts } from '../lib/fonts'
+import { resolveImage, site, telHref } from '../lib/site'
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const { meta, business, contact, labels } = site
+const title = Astro.props.title ? `${Astro.props.title} | ${business.name}` : meta.title
+const description = Astro.props.description ?? meta.description
+const canonical = new URL(Astro.url.pathname, Astro.site)
+
+let ogImage: string | undefined
+if (meta.ogImage) {
+  const img = resolveImage(meta.ogImage)
+  const src =
+    typeof img.src === 'string' ? img.src : (await getImage({ src: img.src, width: 1200, height: 630, fit: 'cover', format: 'jpg' })).src
+  ogImage = new URL(src, Astro.site).href
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: business.name,
+  url: meta.url,
+  description: meta.description,
+  ...(contact.phone && { telephone: telHref(contact.phone).slice(4) }),
+  ...(contact.email && { email: contact.email }),
+  ...(contact.address?.length && { address: contact.address.join(', ') }),
+  ...(ogImage && { image: ogImage }),
+}
+---
+
+<!doctype html>
+<html lang={meta.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {preloadFonts.map((href) => <link rel="preload" as="font" type="font/woff2" href={href} crossorigin />)}
+    {meta.themeColor && <meta name="theme-color" content={meta.themeColor} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={business.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={meta.lang.replace('-', '_')} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <!-- Marks the page as scripted before first paint, so the mobile menu never flashes open. -->
+    <script is:inline>
+      document.documentElement.classList.add('js')
+    </script>
+  </head>
+  <body>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-ink focus:px-5 focus:py-3 focus:font-semibold focus:text-bg"
+    >
+      {labels.skip}
+    </a>
+    <Header />
+    <main id="main" tabindex="-1" class="outline-none">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,57 @@
+---
+import type { SectionData } from '../lib/site'
+import { site } from '../lib/site'
+import About from './sections/About.astro'
+import Contact from './sections/Contact.astro'
+import CtaBand from './sections/CtaBand.astro'
+import Faq from './sections/Faq.astro'
+import Gallery from './sections/Gallery.astro'
+import Hero from './sections/Hero.astro'
+import Hours from './sections/Hours.astro'
+import Prose from './sections/Prose.astro'
+import Services from './sections/Services.astro'
+import Stats from './sections/Stats.astro'
+import Testimonials from './sections/Testimonials.astro'
+
+interface Props {
+  sections: SectionData[]
+  /** True when the page already printed its own h1, so a hero must not add a second. */
+  hasPageHeading?: boolean
+}
+
+const { sections, hasPageHeading = false } = Astro.props
+
+const registry: Record<string, any> = {
+  hero: Hero,
+  services: Services,
+  about: About,
+  gallery: Gallery,
+  testimonials: Testimonials,
+  stats: Stats,
+  hours: Hours,
+  contact: Contact,
+  faq: Faq,
+  cta: CtaBand,
+  prose: Prose,
+}
+
+// A section whose list is empty would render as a heading over nothing, so it is dropped.
+const hasContent = (s: SectionData) => {
+  if (Array.isArray(s.items) && s.items.length === 0) return false
+  if (Array.isArray(s.images) && s.images.length === 0) return false
+  if (s.type === 'hours' && site.hours.length === 0) return false
+  return true
+}
+
+const visible = sections.filter(hasContent)
+const firstHero = visible.findIndex((s) => s.type === 'hero')
+---
+
+{
+  visible.map((section, i) => {
+    const Component = registry[section.type]
+    if (!Component) throw new Error(`site.json: unknown section type "${section.type}"`)
+    const extra = section.type === 'hero' ? { headingLevel: !hasPageHeading && i === firstHero ? 1 : 2 } : {}
+    return <Component {...section} {...extra} />
+  })
+}

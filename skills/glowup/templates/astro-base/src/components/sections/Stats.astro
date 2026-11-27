@@ -1,0 +1,37 @@
+---
+import Section from '../Section.astro'
+
+interface Props {
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  /** Numbers the source site states. Never estimated, never rounded up. */
+  items: { value: string; label: string }[]
+}
+
+const { id, tone, eyebrow, heading, items } = Astro.props
+---
+
+<Section id={id} tone={tone} space="tight">
+  <div class="grid gap-x-12 gap-y-8 lg:grid-cols-12">
+    {
+      (eyebrow || heading) && (
+        <div class="lg:col-span-3">
+          {eyebrow && <p class="eyebrow mb-3">{eyebrow}</p>}
+          {heading && <h2 class="display text-xl">{heading}</h2>}
+        </div>
+      )
+    }
+    <dl class:list={['grid grid-cols-2 gap-x-8 gap-y-8 md:grid-cols-4', eyebrow || heading ? 'lg:col-span-9' : 'lg:col-span-12']}>
+      {
+        items.map((item) => (
+          <div class="flex flex-col-reverse justify-end border-t-2 border-ink pt-4">
+            <dt class="mt-2 text-sm text-ink-muted">{item.label}</dt>
+            <dd class="display text-4xl tabular-nums">{item.value}</dd>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</Section>

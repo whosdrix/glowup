@@ -1,0 +1,13 @@
+---
+import Sections from '../components/Sections.astro'
+import Base from '../layouts/Base.astro'
+import { site } from '../lib/site'
+
+if (!site.home.sections.some((s) => s.type === 'hero')) {
+  throw new Error('site.json: home.sections needs a hero section; it carries the page h1')
+}
+---
+
+<Base>
+  <Sections sections={site.home.sections} />
+</Base>

@@ -1,0 +1,12 @@
+---
+import PageHeader from '../components/PageHeader.astro'
+import Base from '../layouts/Base.astro'
+import { site } from '../lib/site'
+---
+
+<Base title={site.labels.notFound}>
+  <PageHeader title={site.labels.notFound} />
+  <div class="mx-auto max-w-page px-gutter py-block">
+    <a class="btn btn-primary" href="/">{site.labels.home}</a>
+  </div>
+</Base>

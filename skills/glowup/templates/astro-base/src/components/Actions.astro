@@ -1,0 +1,31 @@
+---
+import type { Action } from '../lib/site'
+import Arrow from './Arrow.astro'
+
+interface Props {
+  actions?: Action[]
+  class?: string
+}
+
+const { actions = [], class: cls = '' } = Astro.props
+---
+
+{
+  actions.length > 0 && (
+    <div class:list={['flex flex-wrap items-center gap-x-6 gap-y-3', cls]}>
+      {actions.map((a, i) => {
+        const style = a.style ?? (i === 0 ? 'primary' : 'link')
+        return style === 'link' ? (
+          <a class="link" href={a.href}>
+            {a.label}
+            <Arrow />
+          </a>
+        ) : (
+          <a class:list={['btn', style === 'primary' ? 'btn-primary' : 'btn-secondary']} href={a.href}>
+            {a.label}
+          </a>
+        )
+      })}
+    </div>
+  )
+}

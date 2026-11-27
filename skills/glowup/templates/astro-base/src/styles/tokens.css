@@ -1,0 +1,132 @@
+/*
+  Design tokens. A new art direction is mostly a new version of this file.
+
+  Colour roles, not colour names: components only ever ask for bg, surface,
+  ink, ink-muted, accent, accent-text, accent-ink and line. Tailwind's default
+  palette is switched off so nothing can reach past the roles.
+
+  Contrast contract (WCAG AA), checked against both bg and surface:
+    ink          >= 7:1     (4.5:1 is enough inside .tone-accent)
+    ink-muted    >= 4.5:1
+    accent-text  >= 4.5:1   (the accent, darkened or lightened until it passes)
+    accent-ink   >= 4.5:1 on accent
+*/
+
+@theme {
+  --color-*: initial;
+
+  --color-bg: #f5efe6;
+  --color-surface: #ebe2d3;
+  --color-ink: #1d2624;
+  --color-ink-muted: #505a56;
+  --color-accent: #b5462a;
+  --color-accent-text: #a23c22;
+  --color-accent-ink: #f5efe6;
+  --color-line: #d3c7b3;
+
+  --font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --font-body: 'Instrument Sans Variable', ui-sans-serif, system-ui, sans-serif;
+
+  /* Modular scale, ratio 1.25 from a 17px base. xs is the floor: nothing on
+     the site is smaller than 14px. The top three steps are fluid. */
+  --text-xs: 0.875rem;
+  --text-xs--line-height: 1.45;
+  --text-sm: 0.9375rem;
+  --text-sm--line-height: 1.5;
+  --text-base: 1.0625rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.3125rem;
+  --text-lg--line-height: 1.45;
+  --text-xl: 1.625rem;
+  --text-xl--line-height: 1.25;
+  --text-2xl: clamp(1.75rem, 1.5rem + 1.1vw, 2.0625rem);
+  --text-2xl--line-height: 1.15;
+  --text-3xl: clamp(2.125rem, 1.6rem + 2.2vw, 3.25rem);
+  --text-3xl--line-height: 1.08;
+  --text-4xl: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);
+  --text-4xl--line-height: 1.02;
+  --text-5xl: clamp(2.75rem, 1.35rem + 6vw, 6rem);
+  --text-5xl--line-height: 1;
+
+  /* Spacing rhythm. Utilities stay on Tailwind's 4px grid; these named steps
+     are the only vertical gaps sections use, so the page keeps one beat. */
+  --spacing-gutter: clamp(1.25rem, 4vw, 3rem);
+  --spacing-section: clamp(4.5rem, 9vw, 8.5rem);
+  --spacing-block: clamp(2.5rem, 5vw, 4.5rem);
+
+  --container-page: 80rem;
+  /* Line length is set in rem, not ch. 1ch is the width of "0", and in most
+     text faces that is far wider than an average letter, so 65ch runs to 90
+     characters or more. 31rem of this body font sets 65 to 70 characters.
+     Re-measure after changing --font-body or --text-base. */
+  --container-measure: 31rem;
+
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 999px;
+}
+
+/*
+  Knobs the components read. They are not Tailwind theme keys.
+
+  Two knobs are left unset on purpose, because a value written here would be
+  resolved once at :root and ignore the tones:
+    --display-em-color   colour of the emphasised phrase in a heading
+                         (default: accent-text; set "currentColor" for italic only)
+    --button-border      border of the primary button
+                         (default: none; set "currentColor" for an outlined look)
+*/
+:root {
+  --display-weight: 380;
+  --display-stretch: normal;
+  --display-tracking: -0.022em;
+  --display-transform: none;
+  --display-em-style: italic;
+
+  --eyebrow-font: var(--font-body);
+  --eyebrow-weight: 600;
+  --eyebrow-tracking: 0.09em;
+  --eyebrow-transform: uppercase;
+
+  --button-radius: var(--radius-full);
+  --button-weight: 600;
+  --button-tracking: 0;
+  --button-transform: none;
+  --button-shadow: none;
+  --image-radius: var(--radius-lg);
+  --rule-weight: 1px;
+}
+
+/*
+  Tones. Put tone="surface", "ink" or "accent" on a section and the same role
+  names resolve to a different set, so components need no dark-mode variants.
+  Each tone has to meet the contrast contract on its own.
+*/
+.tone-surface {
+  --color-bg: #ebe2d3;
+  --color-surface: #f5efe6;
+  --color-line: #cdbfa8;
+}
+
+.tone-ink {
+  --color-bg: #1d2b28;
+  --color-surface: #283935;
+  --color-ink: #f5efe6;
+  --color-ink-muted: #b7c2bb;
+  --color-accent: #eba888;
+  --color-accent-text: #eba888;
+  --color-accent-ink: #1d2624;
+  --color-line: #40524c;
+}
+
+.tone-accent {
+  --color-bg: #b5462a;
+  --color-surface: #a23c22;
+  --color-ink: #f5efe6;
+  --color-ink-muted: #f5efe6;
+  --color-accent: #f5efe6;
+  --color-accent-text: #f5efe6;
+  --color-accent-ink: #1d2624;
+  --color-line: #cf7a62;
+}

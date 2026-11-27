@@ -1,0 +1,118 @@
+---
+import type { Action } from '../../lib/site'
+import { rich } from '../../lib/site'
+import Actions from '../Actions.astro'
+import Picture from '../Picture.astro'
+
+interface Fact {
+  label: string
+  value: string
+  href?: string
+}
+
+interface Props {
+  /** split: text beside a tall image. stacked: headline above a wide image. plain: type only. */
+  variant?: 'split' | 'stacked' | 'plain'
+  tone?: string
+  eyebrow?: string
+  heading: string
+  lede?: string
+  image?: string
+  caption?: string
+  actions?: Action[]
+  facts?: Fact[]
+  headingLevel?: 1 | 2
+}
+
+const { variant = 'split', tone, eyebrow, heading, lede, image, caption, actions, facts = [], headingLevel = 1 } = Astro.props
+const H = `h${headingLevel}` as 'h1' | 'h2'
+const layout = image ? variant : 'plain'
+---
+
+<section class:list={[tone && `tone-${tone}`, 'overflow-hidden']}>
+  <div class="mx-auto max-w-page px-gutter pt-12 pb-block lg:pt-20">
+    {
+      layout === 'split' && (
+        <div class="grid gap-x-12 gap-y-12 lg:grid-cols-12">
+          <div class="lg:col-span-7 lg:pt-10 lg:pb-6">
+            {eyebrow && <p class="eyebrow hero-eyebrow mb-7">{eyebrow}</p>}
+            <H class="display text-5xl" set:html={rich(heading)} />
+            {lede && <p class="mt-8 max-w-[34rem] text-lg text-ink-muted">{lede}</p>}
+            <Actions actions={actions} class="mt-9" />
+          </div>
+          <figure class="lg:col-span-5 lg:-mb-24">
+            <Picture image={image!} ratio="4/5" loading="eager" sizes="(min-width: 64rem) 40vw, 100vw" class="max-lg:aspect-square!" />
+            {caption && <figcaption class="mt-3 text-xs text-ink-muted lg:text-right">{caption}</figcaption>}
+          </figure>
+        </div>
+      )
+    }
+
+    {
+      layout === 'stacked' && (
+        <div>
+          {eyebrow && <p class="eyebrow hero-eyebrow mb-7">{eyebrow}</p>}
+          <H class="display max-w-[18ch] text-5xl" set:html={rich(heading)} />
+          <div class="mt-9 grid items-end gap-8 lg:grid-cols-12">
+            {lede && <p class="max-w-[34rem] text-lg text-ink-muted lg:col-span-6">{lede}</p>}
+            <Actions actions={actions} class="lg:col-span-5 lg:col-start-8 lg:justify-end" />
+          </div>
+          <figure class="mt-12">
+            <Picture image={image!} ratio="21/9" loading="eager" sizes="(min-width: 80rem) 76rem, 100vw" class="max-md:aspect-[4/3]!" />
+            {caption && <figcaption class="mt-3 text-xs text-ink-muted">{caption}</figcaption>}
+          </figure>
+        </div>
+      )
+    }
+
+    {
+      layout === 'plain' && (
+        <div class="grid gap-x-12 gap-y-10 lg:grid-cols-12 lg:py-10">
+          <div class="lg:col-span-8">
+            {eyebrow && <p class="eyebrow hero-eyebrow mb-7">{eyebrow}</p>}
+            <H class="display text-5xl" set:html={rich(heading)} />
+          </div>
+          <div class="lg:col-span-4 lg:self-end">
+            {lede && <p class="max-w-[34rem] text-lg text-ink-muted">{lede}</p>}
+            <Actions actions={actions} class="mt-8" />
+          </div>
+        </div>
+      )
+    }
+
+    {
+      facts.length > 0 && (
+        <dl class:list={['mt-14 grid grid-cols-2 gap-x-10 border-t border-line sm:grid-cols-3', layout === 'split' && 'lg:mr-[45%]']}>
+          {facts.map((fact) => (
+            <div class="py-4">
+              <dt class="eyebrow">{fact.label}</dt>
+              <dd class="mt-1 font-medium">
+                {fact.href ? (
+                  <a class="inline-flex min-h-11 items-center underline decoration-line decoration-2 underline-offset-4 hover:decoration-accent" href={fact.href}>
+                    {fact.value}
+                  </a>
+                ) : (
+                  <span class="inline-flex min-h-11 items-center">{fact.value}</span>
+                )}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 2.5rem;
+    border-top: 2px solid var(--color-accent);
+  }
+</style>

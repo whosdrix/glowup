@@ -1,0 +1,90 @@
+---
+import type { Link } from '../../lib/site'
+import Arrow from '../Arrow.astro'
+import Picture from '../Picture.astro'
+import Section from '../Section.astro'
+import SectionHeading from '../SectionHeading.astro'
+
+interface Props {
+  /** image-left / image-right: a portrait image beside the text. text: no image, body set in two columns. */
+  variant?: 'image-left' | 'image-right' | 'text'
+  id?: string
+  tone?: string
+  eyebrow?: string
+  heading?: string
+  body?: string[]
+  image?: string
+  /** A second, smaller image that overlaps the first on wide screens. */
+  imageSecondary?: string
+  points?: { title: string; text: string }[]
+  signoff?: string
+  link?: Link
+}
+
+const { variant = 'image-left', id, tone, eyebrow, heading, body = [], image, imageSecondary, points = [], signoff, link } = Astro.props
+const layout = image ? variant : 'text'
+const flip = layout === 'image-right'
+---
+
+<Section id={id} tone={tone}>
+  {
+    layout === 'text' ? (
+      <div class="grid gap-x-12 gap-y-8 lg:grid-cols-12">
+        <SectionHeading class="lg:col-span-5" eyebrow={eyebrow} heading={heading} />
+        <div class="lg:col-span-7">
+          <div class="max-w-measure space-y-5">
+            {body.map((p, i) => (
+              <p class:list={[i === 0 && 'text-lg']}>{p}</p>
+            ))}
+          </div>
+          {signoff && <p class="display mt-8 text-xl">{signoff}</p>}
+          {link && (
+            <a class="link mt-6" href={link.href}>
+              {link.label}
+              <Arrow />
+            </a>
+          )}
+        </div>
+      </div>
+    ) : (
+      <div class="grid items-start gap-x-12 gap-y-12 lg:grid-cols-12">
+        <div class:list={['relative lg:col-span-5', flip && 'lg:order-2 lg:col-start-8']}>
+          <Picture image={image!} ratio="4/5" sizes="(min-width: 64rem) 38vw, 100vw" class="max-lg:aspect-[4/3]!" />
+          {imageSecondary && (
+            <Picture
+              image={imageSecondary}
+              ratio="1/1"
+              sizes="14rem"
+              class={`absolute -bottom-10 hidden w-48 border-8 border-bg lg:block xl:w-56 ${flip ? '-left-16' : '-right-16'}`}
+            />
+          )}
+        </div>
+        <div class:list={['lg:col-span-6', flip ? 'lg:order-1' : 'lg:col-start-7 lg:pl-6', 'lg:pt-6']}>
+          <SectionHeading eyebrow={eyebrow} heading={heading} />
+          <div class="mt-7 max-w-measure space-y-5">
+            {body.map((p, i) => (
+              <p class:list={[i === 0 ? 'text-lg' : 'text-ink-muted']}>{p}</p>
+            ))}
+          </div>
+          {points.length > 0 && (
+            <dl class="mt-10 grid gap-x-8 sm:grid-cols-2">
+              {points.map((point) => (
+                <div class="border-t border-line py-5">
+                  <dt class="font-semibold">{point.title}</dt>
+                  <dd class="mt-1 text-sm text-ink-muted">{point.text}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
+          {signoff && <p class="display mt-6 text-xl">{signoff}</p>}
+          {link && (
+            <a class="link mt-4" href={link.href}>
+              {link.label}
+              <Arrow />
+            </a>
+          )}
+        </div>
+      </div>
+    )
+  }
+</Section>

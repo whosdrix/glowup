@@ -1,0 +1,26 @@
+---
+import { site } from '../../lib/site'
+
+interface Props {
+  class?: string
+}
+
+const { class: cls = '' } = Astro.props
+---
+
+<div class={cls}>
+  <table class="w-full border-collapse text-left">
+    <caption class="sr-only">{site.labels.hours}</caption>
+    <tbody>
+      {
+        site.hours.map((row) => (
+          <tr class="border-t border-line last:border-b">
+            <th scope="row" class="py-3.5 pr-6 font-normal">{row.label}</th>
+            <td class="py-3.5 text-right font-semibold tabular-nums">{row.value}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  {site.hoursNote && <p class="mt-4 text-sm text-ink-muted">{site.hoursNote}</p>}
+</div>
