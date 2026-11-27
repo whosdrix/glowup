@@ -1,4 +1,5 @@
 ---
+
 name: glowup
 description: Redesign an existing website from its URL. Captures the live site (screenshots, content, brand colours, fonts, contact details), audits it with a score out of 100, proposes three art directions, rebuilds it as an Astro + Tailwind static site using only the real content, verifies the new site scores better on every check, and outputs a before/after proof image. Use when the user says "glowup", "redesign this site", "rebuild this website", "modernise this page" or gives a URL and asks for a better-looking version.
 ---
@@ -65,13 +66,13 @@ Then `npm run build`.
 node SKILL_DIR/dist/glowup.mjs verify <url>
 ```
 
-Serves `site/dist`, screenshots it, runs the same audit and compares. It fails if the score is under 90, if anything got worse than the original, or if there are any contrast errors, images without alt, tap targets under 24px, sideways scrolling, missing viewport meta, more or fewer than one h1, or lines over 80 characters. Each failure names the page and selector.
+Serves `site/dist`, screenshots it, runs the same audit and compares. It fails if the score is under 90, if any check got worse than the original (page weight is reported but does not fail, because self-hosted fonts add a little), or if there are any contrast errors, images without alt, tap targets under 24px, sideways scrolling, missing viewport meta, more or fewer than one h1, or lines over 80 characters. Each failure names the page and selector.
 
 Fix every failure in the site, rebuild, and run verify again until it passes. Then look at `after/pages/home/desktop.png` and `mobile.png` yourself and check them against the direction and `references/audit-checklist.md`. Passing the numbers is the minimum, not the goal.
 
 ## 6. Proof
 
-Verify writes `proof/before-after.png` (desktop and mobile, old and new, with the score and the biggest improvements) and `proof/delta.md`. To re-render the image without auditing again, run `glowup compose <url>`.
+Verify writes `proof/before-after.png` (desktop and mobile, old and new, with the score and the biggest improvements) and `proof/delta.md`. To re-render the image without auditing again, run `glowup compose <url>`. Add `--label <text>` to change the host printed on it, for example when you verified a local copy.
 
 Finish with a short summary for the user:
 

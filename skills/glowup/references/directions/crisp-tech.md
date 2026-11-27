@@ -30,8 +30,8 @@ Geist for everything, with Geist Mono for eyebrows only. The mono labels are the
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/geist/wght.css';
-@import '@fontsource-variable/geist-mono/wght.css';
+@import "@fontsource-variable/geist/wght.css";
+@import "@fontsource-variable/geist-mono/wght.css";
 ```
 
 ```ts
@@ -129,16 +129,16 @@ Body text is 16px here, so the eyebrow floor of 14px is close to it. Keep eyebro
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `split` with a real screenshot or photograph, else `plain` | Say what the firm does and for whom in one sentence. |
-| stats | under the hero, `tone="surface"` | Only measured numbers from the source: years, clients, response time. |
-| services | `cards` | Vary the content, not just the title: give the first card an image, the others a `meta` line. |
-| about | `image-right` | |
-| testimonials | `columns` | Name, role and company exactly as the source gives them. |
-| faq | `accordion` | |
-| contact | `split` with `form` if the source site had a working form endpoint, else `showHours` | |
-| cta | `split`, `tone="ink"` | The dark band, not the blue one, keeps the page from turning into a banner. |
+| Section      | Variant                                                                              | Note                                                                                          |
+| ------------ | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
+| hero         | `split` with a real screenshot or photograph, else `plain`                           | Say what the firm does and for whom in one sentence.                                          |
+| stats        | under the hero, `tone="surface"`                                                     | Only measured numbers from the source: years, clients, response time.                         |
+| services     | `cards`                                                                              | Vary the content, not just the title: give the first card an image, the others a `meta` line. |
+| about        | `image-right`                                                                        |                                                                                               |
+| testimonials | `columns`                                                                            | Name, role and company exactly as the source gives them.                                      |
+| faq          | `accordion`                                                                          |                                                                                               |
+| contact      | `split` with `form` if the source site had a working form endpoint, else `showHours` |                                                                                               |
+| cta          | `split`, `tone="ink"`                                                                | The dark band, not the blue one, keeps the page from turning into a banner.                   |
 
 ## Details that make it
 

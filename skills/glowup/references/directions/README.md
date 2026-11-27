@@ -2,14 +2,14 @@
 
 Six art direction recipes. Each is a complete, distinct look: a palette recipe, a type pairing, token values, section variants and a list of things to avoid.
 
-| File | In a sentence | Typical fit |
-| --- | --- | --- |
-| `editorial.md` | Serif headlines, thin rules, square corners, white paper. | Professional services, architects, restaurants with a story |
-| `bold-minimal.md` | Heavy condensed capitals, black and white, one loud colour. | Gyms, barbers, workshops, trades, venues |
-| `warm-local.md` | Soft serif, cream, earthy accent, rounded photographs. | Cafés, shops, studios, family practices |
-| `crisp-tech.md` | Tight neutral sans, cool white, mono labels, small radii. | IT, B2B, accountants, engineering, modern clinics |
-| `quiet-luxury.md` | Fine display serif, ivory, wide spacing, small tracked capitals. | Salons, spas, jewellers, boutique hotels, fine dining |
-| `playful.md` | Chunky grotesque, tinted background, bright accent, fat outlines. | Children, pets, treats, family leisure, community |
+| File              | In a sentence                                                     | Typical fit                                                 |
+| ----------------- | ----------------------------------------------------------------- | ----------------------------------------------------------- |
+| `editorial.md`    | Serif headlines, thin rules, square corners, white paper.         | Professional services, architects, restaurants with a story |
+| `bold-minimal.md` | Heavy condensed capitals, black and white, one loud colour.       | Gyms, barbers, workshops, trades, venues                    |
+| `warm-local.md`   | Soft serif, cream, earthy accent, rounded photographs.            | Cafés, shops, studios, family practices                     |
+| `crisp-tech.md`   | Tight neutral sans, cool white, mono labels, small radii.         | IT, B2B, accountants, engineering, modern clinics           |
+| `quiet-luxury.md` | Fine display serif, ivory, wide spacing, small tracked capitals.  | Salons, spas, jewellers, boutique hotels, fine dining       |
+| `playful.md`      | Chunky grotesque, tinted background, bright accent, fat outlines. | Children, pets, treats, family leisure, community           |
 
 Read only the files for the directions you are going to pitch.
 
@@ -25,17 +25,17 @@ After capture and audit you know the kind of business, its brand colour, how muc
 
 Common sets:
 
-| Business | Pitch |
-| --- | --- |
-| Café, bakery, florist, craft shop | warm-local, editorial, playful |
-| Restaurant, winery, guesthouse | editorial, warm-local, quiet-luxury |
-| Salon, spa, clinic for aesthetics | quiet-luxury, warm-local, editorial |
-| Trades, garage, builder | bold-minimal, warm-local, crisp-tech |
-| Gym, barber, studio, venue | bold-minimal, playful, editorial |
-| IT, agency, accountant, engineering | crisp-tech, editorial, bold-minimal |
-| Lawyer, architect, consultant | editorial, crisp-tech, quiet-luxury |
-| Nursery, pets, family leisure | playful, warm-local, bold-minimal |
-| Dentist, optician, physiotherapist | warm-local, crisp-tech, editorial |
+| Business                            | Pitch                                |
+| ----------------------------------- | ------------------------------------ |
+| Café, bakery, florist, craft shop   | warm-local, editorial, playful       |
+| Restaurant, winery, guesthouse      | editorial, warm-local, quiet-luxury  |
+| Salon, spa, clinic for aesthetics   | quiet-luxury, warm-local, editorial  |
+| Trades, garage, builder             | bold-minimal, warm-local, crisp-tech |
+| Gym, barber, studio, venue          | bold-minimal, playful, editorial     |
+| IT, agency, accountant, engineering | crisp-tech, editorial, bold-minimal  |
+| Lawyer, architect, consultant       | editorial, crisp-tech, quiet-luxury  |
+| Nursery, pets, family leisure       | playful, warm-local, bold-minimal    |
+| Dentist, optician, physiotherapist  | warm-local, crisp-tech, editorial    |
 
 ## The brief
 

@@ -30,9 +30,9 @@ Newsreader has an optical size axis, so the same family is sharp at 96px and ste
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/newsreader/opsz.css';
-@import '@fontsource-variable/newsreader/opsz-italic.css';
-@import '@fontsource-variable/public-sans/wght.css';
+@import "@fontsource-variable/newsreader/opsz.css";
+@import "@fontsource-variable/newsreader/opsz-italic.css";
+@import "@fontsource-variable/public-sans/wght.css";
 ```
 
 ```ts
@@ -118,15 +118,15 @@ Replace the matching declarations in `src/styles/tokens.css`. Anything not liste
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `stacked`, or `plain` if no photograph is good enough | Headline of 6 to 10 words with one italic phrase. |
-| about | `text` | Long copy in a column, heading in the margin. |
-| services | `list` | The numbered rows read as a contents page. |
-| gallery | `grid` | Captions on. A caption is what makes a picture editorial. |
-| testimonials | `feature`, `tone="ink"` | One long quote, large. |
-| faq | `open` | Answers visible, like a Q&A column. |
-| cta | `split` | Plain statement, one button. |
+| Section      | Variant                                               | Note                                                      |
+| ------------ | ----------------------------------------------------- | --------------------------------------------------------- |
+| hero         | `stacked`, or `plain` if no photograph is good enough | Headline of 6 to 10 words with one italic phrase.         |
+| about        | `text`                                                | Long copy in a column, heading in the margin.             |
+| services     | `list`                                                | The numbered rows read as a contents page.                |
+| gallery      | `grid`                                                | Captions on. A caption is what makes a picture editorial. |
+| testimonials | `feature`, `tone="ink"`                               | One long quote, large.                                    |
+| faq          | `open`                                                | Answers visible, like a Q&A column.                       |
+| cta          | `split`                                               | Plain statement, one button.                              |
 
 Order sections so text-heavy and image-heavy blocks alternate. Leave `stats` out unless the numbers are the story.
 

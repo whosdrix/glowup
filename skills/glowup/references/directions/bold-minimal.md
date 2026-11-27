@@ -30,7 +30,7 @@ One family. Archivo has a width axis: the display style squeezes it to 75% and s
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/archivo/standard.css';
+@import "@fontsource-variable/archivo/standard.css";
 ```
 
 ```ts
@@ -124,15 +124,15 @@ Replace the matching declarations in `src/styles/tokens.css`. Anything not liste
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `plain`, or `stacked` with one strong wide photograph | Headline of 3 to 7 words. Cut the source headline down if it is longer; move the rest to the lede. |
-| stats | directly under the hero, if the source has real numbers | The big numerals are the point of this direction. |
-| services | `list` | Capitals on the titles, prices hard right. |
-| gallery | `mosaic` | Square corners, 4px gaps would also suit: set `gap-1` if the photographs are strong. |
-| testimonials | `columns`, `tone="ink"` | |
-| faq | `accordion` | |
-| cta | `stacked`, `tone="accent"` | The one place centring is right: a short shout and a button. |
+| Section      | Variant                                                 | Note                                                                                               |
+| ------------ | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| hero         | `plain`, or `stacked` with one strong wide photograph   | Headline of 3 to 7 words. Cut the source headline down if it is longer; move the rest to the lede. |
+| stats        | directly under the hero, if the source has real numbers | The big numerals are the point of this direction.                                                  |
+| services     | `list`                                                  | Capitals on the titles, prices hard right.                                                         |
+| gallery      | `mosaic`                                                | Square corners, 4px gaps would also suit: set `gap-1` if the photographs are strong.               |
+| testimonials | `columns`, `tone="ink"`                                 |                                                                                                    |
+| faq          | `accordion`                                             |                                                                                                    |
+| cta          | `stacked`, `tone="accent"`                              | The one place centring is right: a short shout and a button.                                       |
 
 Five or six sections on the home page. If there are more, something is not earning its place.
 

@@ -31,9 +31,9 @@ Fraunces at a light weight is soft without being cute, and its italic is the bes
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/fraunces/opsz.css';
-@import '@fontsource-variable/fraunces/opsz-italic.css';
-@import '@fontsource-variable/instrument-sans/wght.css';
+@import "@fontsource-variable/fraunces/opsz.css";
+@import "@fontsource-variable/fraunces/opsz-italic.css";
+@import "@fontsource-variable/instrument-sans/wght.css";
 ```
 
 ```ts
@@ -112,16 +112,16 @@ export const preloadFonts = [display, displayItalic, body]
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `split` | Use `facts` for hours, street and phone. A local visitor wants those before anything else. |
-| services | `list` | With prices if the source gives them. |
-| about | `image-left`, `tone="surface"` | With `imageSecondary` if there is a good detail shot. Sign off with the owner's name. |
-| gallery | `mosaic` | Five photographs. |
-| testimonials | `feature`, `tone="ink"` | |
-| faq | `accordion` | |
-| contact | `split`, `showHours: true`, `tone="surface"` | Put the access or parking note in `contact.note`. |
-| cta | `split`, `tone="accent"` | |
+| Section      | Variant                                      | Note                                                                                       |
+| ------------ | -------------------------------------------- | ------------------------------------------------------------------------------------------ |
+| hero         | `split`                                      | Use `facts` for hours, street and phone. A local visitor wants those before anything else. |
+| services     | `list`                                       | With prices if the source gives them.                                                      |
+| about        | `image-left`, `tone="surface"`               | With `imageSecondary` if there is a good detail shot. Sign off with the owner's name.      |
+| gallery      | `mosaic`                                     | Five photographs.                                                                          |
+| testimonials | `feature`, `tone="ink"`                      |                                                                                            |
+| faq          | `accordion`                                  |                                                                                            |
+| contact      | `split`, `showHours: true`, `tone="surface"` | Put the access or parking note in `contact.note`.                                          |
+| cta          | `split`, `tone="accent"`                     |                                                                                            |
 
 ## Details that make it
 

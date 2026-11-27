@@ -18,13 +18,13 @@ The skill runs the bundled file in `skills/glowup/dist/`, not the TypeScript sou
 
 ## Layout
 
-| Path | What it is |
-| --- | --- |
-| `skills/glowup/SKILL.md` | The workflow the agent follows |
-| `skills/glowup/references/` | Design rules, anti-patterns, the audit checklist and the direction recipes |
-| `skills/glowup/templates/astro-base/` | The site the agent copies and restyles |
-| `src/` | Source of the CLI: capture, audit, verify, compose |
-| `tests/fixtures/sites/` | Small saved sites the tests run against |
+| Path                                  | What it is                                                                 |
+| ------------------------------------- | -------------------------------------------------------------------------- |
+| `skills/glowup/SKILL.md`              | The workflow the agent follows                                             |
+| `skills/glowup/references/`           | Design rules, anti-patterns, the audit checklist and the direction recipes |
+| `skills/glowup/templates/astro-base/` | The site the agent copies and restyles                                     |
+| `src/`                                | Source of the CLI: capture, audit, verify, compose                         |
+| `tests/fixtures/sites/`               | Small saved sites the tests run against                                    |
 
 ## Adding an art direction
 

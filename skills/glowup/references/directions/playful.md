@@ -31,8 +31,8 @@ Bricolage Grotesque at heavy weights has odd, lively shapes that read as hand-ma
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/bricolage-grotesque/wght.css';
-@import '@fontsource-variable/dm-sans/wght.css';
+@import "@fontsource-variable/bricolage-grotesque/wght.css";
+@import "@fontsource-variable/dm-sans/wght.css";
 ```
 
 ```ts
@@ -124,15 +124,15 @@ Replace the matching declarations in `src/styles/tokens.css`. Anything not liste
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `split` | The photograph gets the 2rem radius. Use `facts` for opening days and phone. |
-| services | `cards` | First card with a photograph. Prices in `meta` if the source has them. |
-| gallery | `mosaic` | Bright photographs, five of them. |
-| about | `image-right`, `tone="surface"` | |
-| testimonials | `columns`, `tone="ink"` | Parents and customers in their own words, from the source. |
-| faq | `accordion` | |
-| cta | `stacked`, `tone="accent"` | Dark text on the bright band. |
+| Section      | Variant                         | Note                                                                         |
+| ------------ | ------------------------------- | ---------------------------------------------------------------------------- |
+| hero         | `split`                         | The photograph gets the 2rem radius. Use `facts` for opening days and phone. |
+| services     | `cards`                         | First card with a photograph. Prices in `meta` if the source has them.       |
+| gallery      | `mosaic`                        | Bright photographs, five of them.                                            |
+| about        | `image-right`, `tone="surface"` |                                                                              |
+| testimonials | `columns`, `tone="ink"`         | Parents and customers in their own words, from the source.                   |
+| faq          | `accordion`                     |                                                                              |
+| cta          | `stacked`, `tone="accent"`      | Dark text on the bright band.                                                |
 
 ## Details that make it
 

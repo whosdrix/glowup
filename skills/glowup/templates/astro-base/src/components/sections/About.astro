@@ -37,6 +37,16 @@ const flip = layout === 'image-right'
               <p class:list={[i === 0 && 'text-lg']}>{p}</p>
             ))}
           </div>
+          {points.length > 0 && (
+            <dl class:list={['grid max-w-[44rem] gap-x-8 sm:grid-cols-2', body.length > 0 && 'mt-10']}>
+              {points.map((point) => (
+                <div class="border-t border-line py-5">
+                  <dt class="font-semibold">{point.title}</dt>
+                  <dd class="mt-1 text-sm text-ink-muted">{point.text}</dd>
+                </div>
+              ))}
+            </dl>
+          )}
           {signoff && <p class="display mt-8 text-xl">{signoff}</p>}
           {link && (
             <a class="link mt-6" href={link.href}>

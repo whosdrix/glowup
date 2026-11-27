@@ -101,7 +101,7 @@ Headings may mark one phrase with `*asterisks*`; it is set in italic accent. Use
 | Type | Variants | Fields |
 | --- | --- | --- |
 | `hero` | `split`, `stacked`, `plain` | `heading` (required), `lede`, `image` (key), `caption`, `actions`, `facts` (`{label, value, href?}[]`, three at most) |
-| `services` | `list`, `cards` | `items` (`{title, text?, meta?, detail?, href?, image?}[]`), `link` (`{label, href}`) |
+| `services` | `list`, `cards` | `items` (`{title, text?, meta?, detail?, href?, image?}[]`), `link` (`{label, href}`). In `cards`, an image on the first item makes that card two columns wide, so use 5 or 8 items to fill the three-column rows. |
 | `about` | `image-left`, `image-right`, `text` | `body` (string[], one per paragraph), `image`, `imageSecondary`, `points` (`{title, text}[]`), `signoff`, `link` |
 | `gallery` | `mosaic`, `grid` | `images` (keys). `mosaic` reads best with 3 or 5 images. |
 | `testimonials` | `feature`, `columns` | `items` (`{quote, name, detail?}[]`) |

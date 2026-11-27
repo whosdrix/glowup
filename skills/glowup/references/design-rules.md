@@ -4,12 +4,12 @@ Rules for building the new site from `templates/astro-base`. They are constraint
 
 Where things live in the template:
 
-| File | What it controls |
-| --- | --- |
-| `src/content/site.json` | All copy, images, section order and variants. Schema in `src/content/README.md`. |
-| `src/styles/tokens.css` | Colour roles, type scale, spacing, radii, measure, style knobs, tones. |
-| `src/styles/fonts.css`, `src/lib/fonts.ts` | Font imports and the preload list. |
-| `src/components/sections/*.astro` | Layout. Edit these only when a variant cannot do what the direction needs. |
+| File                                       | What it controls                                                                 |
+| ------------------------------------------ | -------------------------------------------------------------------------------- |
+| `src/content/site.json`                    | All copy, images, section order and variants. Schema in `src/content/README.md`. |
+| `src/styles/tokens.css`                    | Colour roles, type scale, spacing, radii, measure, style knobs, tones.           |
+| `src/styles/fonts.css`, `src/lib/fonts.ts` | Font imports and the preload list.                                               |
+| `src/components/sections/*.astro`          | Layout. Edit these only when a variant cannot do what the direction needs.       |
 
 Change tokens and variants first. Reach into components last, and never write copy or colours into them.
 
@@ -53,16 +53,16 @@ Do not set this with `65ch`. `1ch` is the width of the digit zero, and in most t
 
 Components use eight roles and nothing else:
 
-| Role | Use | Contrast needed |
-| --- | --- | --- |
-| `bg` | Page background | |
-| `surface` | Cards, panels, alternate bands | |
-| `ink` | Text | 7:1 on `bg` and `surface` (4.5:1 is enough inside `tone-accent`) |
-| `ink-muted` | Secondary text, captions | 4.5:1 on `bg` and `surface` |
-| `accent` | Button fills, underlines, the CTA band | 3:1 on `bg`, unless buttons are outlined |
-| `accent-text` | Accent-coloured text and small marks | 4.5:1 on `bg` and `surface` |
-| `accent-ink` | Text on `accent` | 4.5:1 on `accent` |
-| `line` | Rules and borders | visible on `bg`; about 1.3:1 or more |
+| Role          | Use                                    | Contrast needed                                                  |
+| ------------- | -------------------------------------- | ---------------------------------------------------------------- |
+| `bg`          | Page background                        |                                                                  |
+| `surface`     | Cards, panels, alternate bands         |                                                                  |
+| `ink`         | Text                                   | 7:1 on `bg` and `surface` (4.5:1 is enough inside `tone-accent`) |
+| `ink-muted`   | Secondary text, captions               | 4.5:1 on `bg` and `surface`                                      |
+| `accent`      | Button fills, underlines, the CTA band | 3:1 on `bg`, unless buttons are outlined                         |
+| `accent-text` | Accent-coloured text and small marks   | 4.5:1 on `bg` and `surface`                                      |
+| `accent-ink`  | Text on `accent`                       | 4.5:1 on `accent`                                                |
+| `line`        | Rules and borders                      | visible on `bg`; about 1.3:1 or more                             |
 
 Limits:
 
@@ -146,20 +146,20 @@ Default: almost none.
 
 ## What the verify step measures
 
-| Check | Pass |
-| --- | --- |
-| Contrast (axe, WCAG AA) | 0 failures |
-| Other axe rules (WCAG 2.1 A and AA) | 0 failures |
-| Images without alt | 0 |
-| Smallest text on mobile | 14px or more |
-| Line length | 80 characters or fewer; aim for 65 |
-| Tap targets under 24px | 0 |
-| Horizontal overflow at 390px | none |
-| Viewport meta | present |
-| Layout shift | under 0.1 |
-| Page weight | under 1.5 MB per page |
-| Font families | 3 or fewer |
-| Text colours | 10 or fewer |
-| h1 count | exactly 1 |
+| Check                               | Pass                               |
+| ----------------------------------- | ---------------------------------- |
+| Contrast (axe, WCAG AA)             | 0 failures                         |
+| Other axe rules (WCAG 2.1 A and AA) | 0 failures                         |
+| Images without alt                  | 0                                  |
+| Smallest text on mobile             | 14px or more                       |
+| Line length                         | 80 characters or fewer; aim for 65 |
+| Tap targets under 24px              | 0                                  |
+| Horizontal overflow at 390px        | none                               |
+| Viewport meta                       | present                            |
+| Layout shift                        | under 0.1                          |
+| Page weight                         | under 1.5 MB per page              |
+| Font families                       | 3 or fewer                         |
+| Text colours                        | 10 or fewer                        |
+| h1 count                            | exactly 1                          |
 
 The template passes all of these as shipped. If a number gets worse after your changes, the change is wrong, not the audit.

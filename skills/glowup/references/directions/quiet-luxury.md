@@ -30,9 +30,9 @@ Cormorant Garamond is drawn for display sizes: delicate, tall, sharp. It runs sm
 
 ```css
 /* src/styles/fonts.css */
-@import '@fontsource-variable/cormorant-garamond/wght.css';
-@import '@fontsource-variable/cormorant-garamond/wght-italic.css';
-@import '@fontsource-variable/hanken-grotesk/wght.css';
+@import "@fontsource-variable/cormorant-garamond/wght.css";
+@import "@fontsource-variable/cormorant-garamond/wght-italic.css";
+@import "@fontsource-variable/hanken-grotesk/wght.css";
 ```
 
 ```ts
@@ -129,15 +129,15 @@ Replace the matching declarations in `src/styles/tokens.css`. Anything not liste
 
 ## Layout
 
-| Section | Variant | Note |
-| --- | --- | --- |
-| hero | `stacked` | A short headline, then the best photograph at full width. No `facts` strip; it is too busy here. |
-| about | `image-right` | One paragraph and a sign-off. Cut `points`. |
-| services | `list` | Names and prices only where the source lists them. A menu, not a pitch. |
-| gallery | `grid` | Six photographs, portrait crops, captions optional. |
-| testimonials | `feature`, `tone="ink"` | One quote. |
-| contact | `split` with a photograph | |
-| cta | `stacked`, `tone="surface"` | Centred, short, one button. |
+| Section      | Variant                     | Note                                                                                             |
+| ------------ | --------------------------- | ------------------------------------------------------------------------------------------------ |
+| hero         | `stacked`                   | A short headline, then the best photograph at full width. No `facts` strip; it is too busy here. |
+| about        | `image-right`               | One paragraph and a sign-off. Cut `points`.                                                      |
+| services     | `list`                      | Names and prices only where the source lists them. A menu, not a pitch.                          |
+| gallery      | `grid`                      | Six photographs, portrait crops, captions optional.                                              |
+| testimonials | `feature`, `tone="ink"`     | One quote.                                                                                       |
+| contact      | `split` with a photograph   |                                                                                                  |
+| cta          | `stacked`, `tone="surface"` | Centred, short, one button.                                                                      |
 
 Leave out `stats` and `faq` on the home page; put FAQs on their own page if the source has them. Fewer sections, more space.
 

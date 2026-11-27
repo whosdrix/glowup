@@ -12,7 +12,8 @@
       "!skills/glowup/templates",
       "!coverage",
       "!CHANGELOG.md",
-      "!tests/fixtures"
+      "!tests/fixtures",
+      "!gallery/sites"
     ]
   },
   "formatter": {
