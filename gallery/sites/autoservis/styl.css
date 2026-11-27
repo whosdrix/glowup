@@ -1,0 +1,47 @@
+body { margin: 0; background: #1c3f7a; font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #333; background-image: repeating-linear-gradient(45deg, #1c3f7a 0, #1c3f7a 20px, #204687 20px, #204687 40px); }
+#horni-lista { background: #111; color: #9a9a9a; font-size: 10px; text-align: right; padding: 3px 10px; min-width: 980px; }
+#horni-lista b { color: #ffd900; font-size: 12px; }
+#horni-lista a { color: #7ab8ff; font-size: 10px; }
+#obal { width: 980px; margin: 0 auto; background: #fff; border-left: 4px solid #ffd900; border-right: 4px solid #ffd900; box-shadow: 0 0 20px #000; }
+#hlavicka { background: linear-gradient(#ffe96b, #ffc400); padding: 10px; position: relative; height: 140px; border-bottom: 5px solid #d6322c; }
+#logo { float: left; }
+#slogan { position: absolute; left: 450px; top: 26px; width: 220px; font-family: "Comic Sans MS", "Comic Sans", cursive; font-size: 19px; font-weight: bold; color: #1c3f7a; text-shadow: 1px 1px 0 #fff; transform: rotate(-3deg); line-height: 1.2; }
+#slogan span { color: #d6322c; font-size: 22px; }
+#odznaky { position: absolute; right: 6px; top: 22px; }
+#menu { background: linear-gradient(#e8473f, #a81d18); border-bottom: 3px solid #111; overflow: hidden; }
+#menu a { float: left; padding: 11px 23px; color: #fff; font-family: Impact, "Arial Narrow", sans-serif; font-size: 17px; text-decoration: none; border-right: 1px solid #7c1512; text-shadow: 1px 1px 2px #000; letter-spacing: 1px; }
+#menu a.aktivni, #menu a:hover { background: #ffd900; color: #d6322c; text-shadow: none; }
+#pruh { background: #111; color: #ffd900; font-weight: bold; font-size: 13px; padding: 4px 0; }
+#levy { float: left; width: 210px; padding: 10px; background: #e9eef6; }
+#obsah { float: right; width: 728px; padding: 12px 14px; box-sizing: border-box; }
+.cistic { clear: both; }
+.box { border: 2px solid; border-radius: 8px; margin-bottom: 10px; overflow: hidden; background: #fff; box-shadow: 2px 2px 4px #999; }
+.box h3 { margin: 0; padding: 5px 8px; color: #fff; font-size: 13px; }
+.box p { margin: 0; padding: 7px 8px; font-size: 11px; line-height: 1.5; }
+.box a { font-size: 10px; }
+.cerveny { border-color: #d6322c; } .cerveny h3 { background: #d6322c; }
+.modry { border-color: #2c5aa0; } .modry h3 { background: #2c5aa0; }
+.zluty { border-color: #e0a800; background: #fffbe0; } .zluty h3 { background: #ffd900; color: #d6322c; }
+.zeleny { border-color: #3fae49; } .zeleny h3 { background: #3fae49; }
+.cena { color: #d6322c; font-size: 15px; }
+.pocitadlo { font-size: 9px; color: #999; text-align: center; }
+.pocitadlo span { background: #111; color: #3f3; font-family: "Courier New", monospace; padding: 1px 3px; }
+h1 { font-family: Impact, "Arial Narrow", sans-serif; font-size: 27px; color: #d6322c; margin: 0 0 8px; text-shadow: 2px 2px 0 #ffd900; font-weight: normal; letter-spacing: 1px; }
+h2 { font-size: 16px; color: #2c5aa0; border-bottom: 2px dotted #ffc400; margin: 14px 0 6px; padding-bottom: 2px; }
+h2.zel { color: #3fae49; } h2.cerv { color: #d6322c; text-decoration: underline; } h2.oranz { color: #f07c00; font-style: italic; }
+#obsah p { margin: 0 0 8px; line-height: 1.45; text-align: justify; }
+#obsah a { color: #1a6fd6; }
+.dulezite { color: #d6322c; font-weight: bold; }
+.zlute { background: #ffff66; }
+.foto { border: 3px solid #fff; box-shadow: 0 0 5px #333; margin: 4px; }
+.vpravo { float: right; margin-left: 12px; } .vlevo { float: left; margin-right: 12px; }
+.galerie { text-align: center; background: #e9eef6; padding: 8px 0; border: 1px dashed #2c5aa0; margin: 10px 0; }
+.tlacitko { display: inline-block; background: linear-gradient(#5fd068, #2a8a33); color: #fff !important; font-weight: bold; padding: 8px 18px; border-radius: 20px; border: 2px solid #1f6a26; text-decoration: none; font-size: 14px; box-shadow: 2px 2px 3px #666; text-shadow: 1px 1px 1px #000; }
+table.cenik { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 12px; }
+table.cenik td { border: 1px solid #bbb; padding: 3px 6px; }
+table.cenik tr:nth-child(odd) td { background: #fffbe0; }
+table.cenik th { background: #2c5aa0; color: #fff; padding: 4px 6px; text-align: left; }
+table.cenik td.kc { text-align: right; color: #d6322c; font-weight: bold; white-space: nowrap; }
+.reference { background: #f2fff2; border-left: 5px solid #3fae49; padding: 6px 10px; font-style: italic; color: #5d8a5d; margin-bottom: 8px; }
+#paticka { background: #111; color: #777; font-size: 9px; line-height: 1.7; text-align: center; padding: 10px; border-top: 5px solid #d6322c; }
+#paticka a { color: #999; }
