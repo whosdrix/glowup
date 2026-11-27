@@ -1,0 +1,38 @@
+{
+  "name": "glowup",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Give it a URL, get back a redesigned site with before/after proof. An agent skill for Claude Code and Codex.",
+  "license": "MIT",
+  "author": "whosdrix",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whosdrix/glowup.git"
+  },
+  "homepage": "https://github.com/whosdrix/glowup#readme",
+  "bugs": "https://github.com/whosdrix/glowup/issues",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsup",
+    "glowup": "tsx src/cli.ts",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check .",
+    "format": "biome check --write .",
+    "typecheck": "tsc --noEmit",
+    "cards": "tsx scripts/cards.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.6.9",
+    "@types/node": "^22.20.7",
+    "axe-core": "^4.14.1",
+    "playwright-core": "^1.65.1",
+    "tsup": "^9.0.0",
+    "tsx": "^4.23.15",
+    "typescript": "5.9",
+    "vitest": "^5.1.2"
+  }
+}
