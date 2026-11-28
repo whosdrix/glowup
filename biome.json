@@ -13,7 +13,9 @@
       "!coverage",
       "!CHANGELOG.md",
       "!tests/fixtures",
-      "!gallery/sites"
+      "!gallery/sites",
+      "!.release-please-manifest.json",
+      "!.claude-plugin"
     ]
   },
   "formatter": {
