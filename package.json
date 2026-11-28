@@ -1,6 +1,6 @@
 {
   "name": "glowup",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Give it a URL, get back a redesigned site with before/after proof. An agent skill for Claude Code and Codex.",
   "license": "MIT",
